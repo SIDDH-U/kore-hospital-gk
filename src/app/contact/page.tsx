@@ -1,32 +1,34 @@
 import React from "react";
 import type { Metadata } from "next";
-import { hospitalConfig, getSiteUrl } from "@/config/hospital";
-import { ContactContent } from "./ContactContent";
+import { siteConfig, getSiteUrl } from "@/config/site.config";
+import { TopStrip } from "@/components/TopStrip";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { StickyActionBar } from "@/components/StickyActionBar";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { ContactSection } from "@/components/ContactSection";
 
 export const metadata: Metadata = {
-  title: "Contact Us & Location",
-  description: `Contact ${hospitalConfig.name}, Nanded. Address: ${hospitalConfig.location.fullAddress}. Phone: ${hospitalConfig.contact.display}, Emergency 24/7: ${hospitalConfig.contact.emergencyPhone}.`,
+  title: `Contact Us & Directions | ${siteConfig.brand.name}`,
+  description: `Contact ${siteConfig.brand.name}. Schedule a consultation via WhatsApp or phone. Located at ${siteConfig.brand.fullAddress}.`,
   alternates: {
     canonical: `${getSiteUrl()}/contact`,
-  },
-  openGraph: {
-    title: `Contact Us & Hospital Location | ${hospitalConfig.name}`,
-    description: `Get in touch with ${hospitalConfig.name}, Nanded for appointments, emergency admissions, and directions.`,
-    url: `${getSiteUrl()}/contact`,
-    siteName: hospitalConfig.name,
-    images: [
-      {
-        url: `${getSiteUrl()}/images/hero-desktop.webp`,
-        width: 1200,
-        height: 630,
-        alt: `Contact ${hospitalConfig.name}`,
-      },
-    ],
-    locale: "en_IN",
-    type: "website",
   },
 };
 
 export default function ContactPage() {
-  return <ContactContent />;
+  return (
+    <div className="min-h-screen flex flex-col bg-[#FAFCFC]">
+      <TopStrip />
+      <Header />
+
+      <main className="flex-1 pb-16 lg:pb-0">
+        <ContactSection />
+      </main>
+
+      <Footer />
+      <FloatingWhatsApp />
+      <StickyActionBar />
+    </div>
+  );
 }

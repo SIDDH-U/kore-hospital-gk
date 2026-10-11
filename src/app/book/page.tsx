@@ -1,29 +1,30 @@
 import React, { Suspense } from "react";
 import type { Metadata } from "next";
-import { hospitalConfig, getSiteUrl } from "@/config/hospital";
+import { siteConfig, getSiteUrl } from "@/config/site.config";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { BookAppointmentForm, BookFormSkeleton } from "./BookForm";
 
 export const metadata: Metadata = {
-  title: "Book an Appointment",
-  description: `Schedule an outpatient consultation or specialist doctor appointment at ${hospitalConfig.name}, ${hospitalConfig.location.city}. ${hospitalConfig.callbackText}.`,
+  title: `Book a Consultation | ${siteConfig.brand.name}`,
+  description: `Schedule a consultation with our specialist dentists at ${siteConfig.brand.name}. ${siteConfig.brand.callbackNotice}`,
   alternates: {
     canonical: `${getSiteUrl()}/book`,
   },
   openGraph: {
-    title: `Book an Appointment | ${hospitalConfig.name}`,
-    description: `Book a doctor consultation online at ${hospitalConfig.name}, ${hospitalConfig.location.city}. Fast-track appointments with leading medical specialists.`,
+    title: `Book an Appointment | ${siteConfig.brand.name}`,
+    description: `Book your dental consultation online at ${siteConfig.brand.name}. Experience gentle, anxiety-free dental care.`,
     url: `${getSiteUrl()}/book`,
-    siteName: hospitalConfig.name,
+    siteName: siteConfig.brand.name,
     images: [
       {
         url: `${getSiteUrl()}/images/hero-desktop.webp`,
-        width: 1200,
-        height: 630,
-        alt: `Book an Appointment at ${hospitalConfig.name}`,
+        width: 1600,
+        height: 900,
+        alt: `Book a Consultation at ${siteConfig.brand.name}`,
       },
     ],
     locale: "en_IN",
@@ -33,25 +34,23 @@ export const metadata: Metadata = {
 
 export default function BookPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F5EF]/60 text-[#1F2D2B]">
+    <div className="min-h-screen flex flex-col bg-[#FAFCFC] text-[#12303A]">
       <TopStrip />
       <Header />
 
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8 pb-20 lg:pb-12">
-        {/* Server-side h1 for SEO & accessibility */}
-        <h1 className="sr-only">Book an Appointment | {hospitalConfig.name}</h1>
+        <h1 className="sr-only">Book a Consultation | {siteConfig.brand.name}</h1>
 
-        {/* Noscript fallback */}
         <noscript>
-          <div className="max-w-xl mx-auto mb-6 p-4 rounded-2xl bg-[#EBF7F0] border border-[#D8EDE0] text-center text-sm text-[#0F3D3E] font-medium">
+          <div className="max-w-xl mx-auto mb-6 p-4 rounded-2xl bg-[#E9F7F5] border border-[#26B5AC]/30 text-center text-sm text-[#0B3B4A] font-medium">
             Please call{" "}
             <a
-              href={`tel:${hospitalConfig.contact.emergencyPhoneRaw}`}
-              className="font-bold underline text-[#0F3D3E]"
+              href={`tel:${siteConfig.contact.phoneRaw}`}
+              className="font-bold underline text-[#0B3B4A]"
             >
-              {hospitalConfig.contact.emergencyPhone}
+              {siteConfig.contact.phone}
             </a>{" "}
-            to book an appointment.
+            to schedule a consultation.
           </div>
         </noscript>
 
@@ -61,6 +60,7 @@ export default function BookPage() {
       </main>
 
       <Footer />
+      <FloatingWhatsApp />
       <StickyActionBar />
     </div>
   );

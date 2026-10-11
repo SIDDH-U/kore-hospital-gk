@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { hospitalConfig, getSiteUrl } from "@/config/hospital";
+import { siteConfig } from "@/config/site.config";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -42,10 +43,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: pageUrl,
     },
     openGraph: {
-      title: `${article.title} | ${hospitalConfig.name}`,
+      title: `${article.title} | ${siteConfig.brand.name}`,
       description: article.excerpt,
       url: pageUrl,
-      siteName: hospitalConfig.name,
+      siteName: siteConfig.brand.name,
       images: [
         {
           url: imageUrl,
@@ -160,7 +161,7 @@ async function BlogContent({ params }: PageProps) {
             ))}
 
             <p>
-              At LifeCare Hospital, our multidisciplinary team is dedicated to preventive medicine and educating our patients. If you or your family members experience concerning symptoms, early clinical consultation ensures the best long-term outcome.
+              At {siteConfig.brand.name}, our specialist clinical team is dedicated to preventive oral wellness and educating our patients. If you or your family members experience dental symptoms, early clinical consultation ensures the best long-term outcome.
             </p>
           </div>
 
@@ -174,7 +175,7 @@ async function BlogContent({ params }: PageProps) {
                 {article.author}
               </h3>
               <p className="text-xs text-[#536462]">
-                Senior Specialist · LifeCare Multi-Speciality Hospital, Nanded
+                Clinical Specialist · {siteConfig.brand.name}, {siteConfig.brand.city}
               </p>
             </div>
             <Link

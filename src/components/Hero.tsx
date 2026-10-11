@@ -3,34 +3,27 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { hospitalConfig } from "@/config/hospital";
-import { StarIcon, CalendarIcon, PhoneIcon, ArrowRightIcon } from "./Icons";
+import { siteConfig, buildWhatsAppLink } from "@/config/site.config";
+import { StarIcon, CalendarIcon, PhoneIcon, ArrowRightIcon, WhatsAppIcon, ShieldCheckIcon } from "./Icons";
 import { useRipple, useIdleAnimationObserver } from "./useRipple";
 
 interface HeroProps {
   onOpenBooking?: () => void;
 }
 
-const HERO_MOBILE_BLUR =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAKCAIAAAAGpYjXAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAA/klEQVQImSXJ30rCUACA8fMAvVB3vYC3QeBVj5DXZkEUYUOCIpASMRG9mDikZohGiVvsbHM7/3WzdEet423QdYjwu/n4gMuFS7nLhSfGPhM+26SDCUBxAtl4s7mAjG85RID3EXF4bCP6gdmWhekgoMCPvizMm2a3/FgJOB8GoRWigT8CWK7IfHl9ln0qHDPBi4XLPvSmSoFc+ar+1ms9d5u1Ss00WudHVdN4RS640XU2/xGf33oHti0vn8+m7xudoQ1KejsksVysZaKmmKW04t5+Onf7AGyRuGy2UL9USDSRd9pF5iD10u8BOElQtKKRWq7/TqvGzmFm90Sj0ewfIAm0DoM3+yIAAAAASUVORK5CYII=";
-
-const HERO_DESKTOP_BLUR =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAIAAAB1kpiRAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAxUlEQVQImQG6AEX/AODp7b7Q07HCwaOvrbG4trW4s4yAdqKsp6u4sY6jnADS39bP397F1di1wMHJzsi1tKufemuqubGJe3CkubYAhp6IlrGkrMXGjaOZlqaluMPIqq+5o7i1rZB8iqmgALTEwZSspqS+w5ahpLG4uOLn8czV4trc4laOlEaCiwC7yM2xwsjC1Nm7xMPS1dLW3OPY1drk5eumqKpbVlMAxtHWxtbax9TYwcjIxsjFytLb2uLtuMjVIV9saoqK2ZV+0sRmXvcAAAAASUVORK5CYII=";
-
 export function Hero({ onOpenBooking }: HeroProps) {
   const heroRef = useRef<HTMLElement | null>(null);
   const bookBtnRef = useRef<HTMLAnchorElement | null>(null);
   const callBtnRef = useRef<HTMLAnchorElement | null>(null);
 
-  // Ripple handlers for primary and call button
-  const { ripples: bookRipples, createRipple: createBookRipple } = useRipple("mint");
-  const { ripples: callRipples, createRipple: createCallRipple } = useRipple("teal");
+  // Ripple handlers for primary and secondary buttons
+  const { ripples: bookRipples, createRipple: createBookRipple } = useRipple("teal");
+  const { ripples: callRipples, createRipple: createCallRipple } = useRipple("mint");
 
-  // Idle animation viewport observer (max 2 on screen)
+  // Idle animation viewport observer
   useIdleAnimationObserver(bookBtnRef);
   useIdleAnimationObserver(callBtnRef);
 
-  // Track if hero is in viewport / tab is visible to pause animations
   const [isHeroActive, setIsHeroActive] = useState(true);
 
   useEffect(() => {
@@ -47,11 +40,7 @@ export function Hero({ onOpenBooking }: HeroProps) {
     observer.observe(el);
 
     const handleVisibility = () => {
-      if (document.hidden) {
-        setIsHeroActive(false);
-      } else {
-        setIsHeroActive(true);
-      }
+      setIsHeroActive(!document.hidden);
     };
 
     document.addEventListener("visibilitychange", handleVisibility);
@@ -66,49 +55,47 @@ export function Hero({ onOpenBooking }: HeroProps) {
       ref={heroRef}
       id="hero"
       aria-labelledby="hero-heading"
-      className={`relative bg-[#0F3D3E] text-white rounded-b-[36px] sm:rounded-b-[48px] lg:rounded-b-[60px] overflow-hidden flex flex-col lg:block ${
+      className={`relative bg-[#0B3B4A] text-white rounded-b-[36px] sm:rounded-b-[48px] lg:rounded-b-[60px] overflow-hidden flex flex-col lg:block ${
         !isHeroActive ? "hero-paused" : ""
       }`}
     >
       {/* ========================================================
-          RESPONSIVE HERO BACKGROUND PHOTO
+          RESPONSIVE HERO BACKGROUND PHOTO WITH GRADIENT MASK
           Mobile (< 1024px): Sits at bottom with vertical mask fade
-          Desktop (1024px+): Covers right 60% with horizontal mask fade
-          Picture element ensures ONLY ONE image is downloaded based on viewport width
+          Desktop (1024px+): Covers right 58% with smooth horizontal gradient mask
          ======================================================== */}
       <div
-        className="relative w-full aspect-[4/5] -mt-8 overflow-hidden z-0 order-2 lg:order-none lg:mt-0 lg:aspect-auto lg:absolute lg:inset-y-0 lg:right-0 lg:w-[60%] lg:pointer-events-none"
+        className="relative w-full aspect-[4/5] -mt-6 sm:-mt-8 overflow-hidden z-0 order-2 lg:order-none lg:mt-0 lg:aspect-auto lg:absolute lg:inset-y-0 lg:right-0 lg:w-[58%] lg:pointer-events-none"
         aria-hidden="true"
       >
-        {/* Soft mint radial glow pulsing behind doctors */}
+        {/* Soft aqua radial glow pulsing behind the patient */}
         <div
-          className="mint-glow-pulse absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(205,235,216,0.3)_0%,transparent_65%)] lg:bg-[radial-gradient(circle_at_65%_35%,rgba(205,235,216,0.35)_0%,transparent_70%)] pointer-events-none z-10"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(38,181,172,0.22)_0%,transparent_65%)] lg:bg-[radial-gradient(circle_at_60%_40%,rgba(38,181,172,0.28)_0%,transparent_70%)] pointer-events-none z-10"
         />
 
         {/* Masked photo container with responsive gradient mask */}
-        <div className="relative w-full h-full hero-photo-zoom hero-photo-mask">
+        <div className="relative w-full h-full hero-photo-mask">
           <picture className="w-full h-full">
             <source
               media="(min-width: 1024px)"
               srcSet="/images/hero-desktop.webp"
-              width={1200}
-              height={675}
+              width={1600}
+              height={900}
             />
             <img
               src="/images/hero-mobile.webp"
-              alt="LifeCare Hospital senior doctors and medical team"
+              alt={`Happy smiling patient at ${siteConfig.brand.name}`}
               width={800}
               height={1000}
               fetchPriority="high"
               loading="eager"
-              className="w-full h-full object-cover object-top lg:object-[65%_30%]"
-              style={{ filter: "saturate(0.9)" }}
+              className="w-full h-full object-cover object-top lg:object-[60%_25%]"
             />
           </picture>
 
-          {/* Teal tint overlay */}
+          {/* Deep ocean teal tint overlay for perfect text contrast */}
           <div
-            className="absolute inset-0 bg-[#0F3D3E]/[0.28] pointer-events-none"
+            className="absolute inset-0 bg-[#0B3B4A]/[0.22] pointer-events-none"
             style={{ mixBlendMode: "multiply" }}
           />
         </div>
@@ -117,65 +104,60 @@ export function Hero({ onOpenBooking }: HeroProps) {
       {/* ========================================================
           HERO CONTENT CONTAINER
           Mobile: Top block in column layout
-          Desktop: Left column over solid teal
+          Desktop: Left column over solid deep teal
          ======================================================== */}
-      <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-7 sm:pt-10 lg:py-24 order-1 lg:order-none">
-        {/* Text Block on Solid Teal */}
+      <div className="relative z-10 max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:py-24 order-1 lg:order-none">
         <div className="max-w-xl lg:max-w-2xl flex flex-col items-start">
-          {/* 1. Rating Chip (Load sequence 1) */}
-          <div className="hero-seq-1 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs sm:text-sm font-semibold text-white mb-4 sm:mb-5 shadow-sm">
-            <span className="font-bold text-[#CDEBD8]">{hospitalConfig.hero.badgeRating}</span>
-            <div className="flex items-center text-[#FBBF24]">
-              <span className="star-twinkle">
-                <StarIcon className="w-3.5 h-3.5 fill-[#FBBF24]" />
-              </span>
+          {/* 1. Rating & Trust Chip (Sequence 1) */}
+          <div className="hero-seq-1 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs sm:text-sm font-semibold text-white mb-4 sm:mb-6 backdrop-blur-sm shadow-sm">
+            <div className="flex items-center text-[#F2A65A]">
+              <StarIcon className="w-4 h-4 fill-[#F2A65A] text-[#F2A65A]" />
             </div>
-            <span className="text-white/40">|</span>
-            <span className="text-white/90">{hospitalConfig.hero.badgePatients}</span>
+            <span className="font-bold text-white">{siteConfig.hero.badgeRating}</span>
+            <span className="text-white/30">|</span>
+            <span className="text-white/90">{siteConfig.hero.badgePatients}</span>
           </div>
 
-          {/* 2 & 3. Headline with 2 staggered lines (Load sequence 2 & 3) */}
+          {/* 2 & 3. Headline with Serif Display (Sequence 2 & 3) */}
           <h1
             id="hero-heading"
-            aria-label={`${hospitalConfig.hero.headingPrefix} ${hospitalConfig.hero.headingRest}`}
-            className="hero-h1 font-extrabold text-white tracking-tight text-left max-w-xl drop-shadow-sm text-balance"
+            aria-label={`${siteConfig.hero.headingPrefix} ${siteConfig.hero.headingHighlight} ${siteConfig.hero.headingRest}`}
+            className="hero-h1 font-bold text-white tracking-tight text-left max-w-xl drop-shadow-sm text-balance"
           >
             <span aria-hidden="true">
-              {/* Headline Line 1 */}
               <span className="hero-seq-2 block">
-                <span className="healing-shimmer">{hospitalConfig.hero.headingPrefix}</span>{" "}
-                Begins
+                <span className="smile-shimmer font-serif">{siteConfig.hero.headingPrefix}</span>
               </span>
-              {/* Headline Line 2 */}
-              <span className="hero-seq-3 block">
-                The Moment You Walk In
+              <span className="hero-seq-3 block font-serif font-medium text-white/95 mt-1 sm:mt-1.5">
+                {siteConfig.hero.headingHighlight}{" "}
+                <span className="text-[#F2A65A] italic">{siteConfig.hero.headingRest}</span>
               </span>
             </span>
           </h1>
 
-          {/* 4. Subtext (Load sequence 4) */}
-          <p className="hero-seq-4 mt-3.5 sm:mt-4 text-base sm:text-lg text-white/90 leading-relaxed max-w-lg text-left drop-shadow-sm text-balance">
-            <span className="lg:hidden">{hospitalConfig.hero.subtext}</span>
-            <span className="hidden lg:inline">{hospitalConfig.hero.desktopSubtext}</span>
+          {/* 4. Subtext (Sequence 4) */}
+          <p className="hero-seq-4 mt-4 sm:mt-5 text-base sm:text-lg text-white/85 leading-relaxed max-w-lg text-left drop-shadow-sm text-balance font-normal">
+            <span className="lg:hidden">{siteConfig.hero.subtext}</span>
+            <span className="hidden lg:inline">{siteConfig.hero.desktopSubtext}</span>
           </p>
 
-          {/* 5. Buttons (Load sequence 5) */}
+          {/* 5. Action Buttons (Sequence 5) */}
           <div
             id="hero-cta-buttons"
-            className="hero-seq-5 mt-6 sm:mt-7 w-full flex flex-row max-[359px]:flex-col items-stretch sm:items-center gap-3"
+            className="hero-seq-5 mt-7 sm:mt-8 w-full flex flex-row max-[359px]:flex-col items-stretch sm:items-center gap-3 sm:gap-4"
           >
-            {/* Primary Book Appointment Button */}
+            {/* Primary CTA: Book Appointment */}
             <Link
               ref={bookBtnRef}
               href="/book"
               onClick={onOpenBooking}
               onPointerDown={createBookRipple}
               style={{ "--shine-delay": "0.4s" } as React.CSSProperties}
-              className="btn-idle-shine btn-ripple-container flex-1 h-[48px] px-6 rounded-full bg-[#CDEBD8] hover:bg-[#B2E0C2] text-[#0F3D3E] font-extrabold text-sm sm:text-base btn-press btn-mint flex items-center justify-center gap-2 shadow-lg shadow-[#0F3D3E]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8FBFA3] transition-all whitespace-nowrap"
+              className="btn-idle-shine btn-ripple-container flex-1 sm:flex-initial h-[50px] px-7 rounded-full bg-[#F2A65A] hover:bg-[#E09244] text-[#07252F] font-extrabold text-sm sm:text-base btn-press flex items-center justify-center gap-2.5 shadow-lg shadow-[#0B3B4A]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#26B5AC] transition-all whitespace-nowrap"
             >
-              <CalendarIcon className="w-5 h-5 text-[#0F3D3E] shrink-0" />
-              <span>{hospitalConfig.hero.ctaPrimary}</span>
-              <ArrowRightIcon className="hidden sm:inline w-4 h-4 text-[#0F3D3E]" />
+              <CalendarIcon className="w-5 h-5 text-[#07252F] shrink-0" />
+              <span>{siteConfig.hero.ctaPrimary}</span>
+              <ArrowRightIcon className="w-4 h-4 text-[#07252F]" />
 
               {/* Touch Ripples */}
               {bookRipples.map((r) => (
@@ -187,24 +169,24 @@ export function Hero({ onOpenBooking }: HeroProps) {
                     top: r.y,
                     width: r.size,
                     height: r.size,
-                    backgroundColor: r.color,
+                    backgroundColor: "rgba(255,255,255,0.4)",
                   }}
                 />
               ))}
             </Link>
 
-            {/* Call Us Button */}
+            {/* Secondary CTA: Call Clinic */}
             <a
               ref={callBtnRef}
-              href={`tel:${hospitalConfig.contact.emergencyPhoneRaw}`}
+              href={`tel:${siteConfig.contact.phoneRaw}`}
               onPointerDown={createCallRipple}
-              className="btn-ripple-container w-auto max-[359px]:w-auto shrink-0 h-[48px] px-5 rounded-full bg-[#185553] hover:bg-[#1f6664] text-white border border-[#CDEBD8]/35 font-bold text-sm sm:text-base btn-press flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3] transition-all shadow-sm whitespace-nowrap"
-              aria-label={`Call LifeCare Hospital at ${hospitalConfig.contact.emergencyPhone}`}
+              className="btn-ripple-container shrink-0 h-[50px] px-6 rounded-full bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-sm sm:text-base btn-press flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#26B5AC] transition-all backdrop-blur-sm whitespace-nowrap"
+              aria-label={`Call ${siteConfig.brand.name} at ${siteConfig.contact.phone}`}
             >
               <span className="phone-ring-icon">
-                <PhoneIcon className="w-4 h-4 text-[#CDEBD8]" />
+                <PhoneIcon className="w-4 h-4 text-[#26B5AC]" />
               </span>
-              <span>{hospitalConfig.hero.ctaSecondary}</span>
+              <span>{siteConfig.hero.ctaSecondary}</span>
 
               {/* Touch Ripples */}
               {callRipples.map((r) => (
@@ -216,11 +198,29 @@ export function Hero({ onOpenBooking }: HeroProps) {
                     top: r.y,
                     width: r.size,
                     height: r.size,
-                    backgroundColor: r.color,
+                    backgroundColor: "rgba(255,255,255,0.25)",
                   }}
                 />
               ))}
             </a>
+          </div>
+
+          {/* Reassuring Dental Studio Trust Indicators */}
+          <div className="mt-8 pt-6 border-t border-white/15 w-full flex flex-wrap items-center gap-y-2 gap-x-5 text-xs sm:text-sm text-white/80">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheckIcon className="w-4 h-4 text-[#26B5AC]" />
+              <span className="font-semibold text-white/95">Hospital-Grade Sterilisation</span>
+            </div>
+            <span className="text-white/30 hidden sm:inline">·</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#26B5AC]" />
+              <span className="font-semibold text-white/95">Computer-Assisted Numbing</span>
+            </div>
+            <span className="text-white/30 hidden sm:inline">·</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#F2A65A]" />
+              <span className="font-semibold text-white/95">0% Interest EMI Available</span>
+            </div>
           </div>
         </div>
       </div>

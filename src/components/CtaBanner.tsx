@@ -3,8 +3,8 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { hospitalConfig } from "@/config/hospital";
-import { CalendarIcon, ArrowRightIcon } from "./Icons";
+import { siteConfig, buildWhatsAppLink } from "@/config/site.config";
+import { CalendarIcon, WhatsAppIcon, ArrowRightIcon } from "./Icons";
 import { useRipple, useIdleAnimationObserver } from "./useRipple";
 
 interface CtaBannerProps {
@@ -12,106 +12,90 @@ interface CtaBannerProps {
 }
 
 export function CtaBanner({ onOpenBooking }: CtaBannerProps) {
-  const { ripples, createRipple } = useRipple("mint");
-  const btnRef = useRef<HTMLAnchorElement | null>(null);
-  useIdleAnimationObserver(btnRef);
+  const bookBtnRef = useRef<HTMLAnchorElement | null>(null);
+  useIdleAnimationObserver(bookBtnRef);
+  const { ripples, createRipple } = useRipple("teal");
 
-  const titleWords = hospitalConfig.ctaBanner.title.split(" ");
+  const handleBook = (e: React.MouseEvent) => {
+    if (onOpenBooking) {
+      e.preventDefault();
+      onOpenBooking();
+    }
+  };
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 bg-white reveal-on-scroll">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-[24px] sm:rounded-3xl lg:rounded-[36px] bg-[#0F3D3E] text-white overflow-hidden shadow-xl">
-          {/* Drifting soft mint radial glow behind the heading */}
-          <div
-            className="absolute -top-12 -left-12 w-96 h-96 bg-[#2DA870]/20 rounded-full blur-3xl pointer-events-none cta-glow-drift"
-            aria-hidden="true"
-          />
-
-          {/* ========================================================
-              RESPONSIVE BACKGROUND PHOTO
-              Mobile (< 768px): Aspect 16:9 at top with bottom fade mask
-              Tablet/Desktop (768px+): Absolute right 45% with left fade mask
-              Rendered ONCE with responsive classes
-             ======================================================== */}
-          <div
-            className="relative w-full aspect-[16/9] md:aspect-auto md:absolute md:inset-y-0 md:right-0 md:w-[45%] pointer-events-none overflow-hidden cta-photo-mask"
-            aria-hidden="true"
-          >
-            <div className="relative w-full h-full cta-photo-zoom">
-              <Image
-                src="/images/cta-banner.webp"
-                alt="Compassionate medical team at LifeCare Hospital"
-                fill
-                sizes="(max-width: 768px) 100vw, (min-width: 1024px) 540px, 450px"
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAIAAABPmPnhAAAACXBIWXMAAAPoAAAD6AG1e1JrAAABA0lEQVQImQH4AAf/ALC4sJOponyZkbq+s8TIwL29r8XAsquuptne3MO+sgDZ2tOrvriJpJums6fQ2NWosZfCu62De3U8MiyblIsA5u3vrcfFhaijw8e95unkcW5jd1hFsox5WUAwXVFIANbl6ZS3tFBtVJ+qn5enm4JpWqp8ZaR2X0YvIEA0LQCfxcqyvrpnemapq52DiITKw8O5qKBmTTyai4VTQjgAvMG/tLe0qq2lsLCjlIyI3tPUtpiJzqGDvpZ4iWZLAMe8sM3PzsbHws7Lw7y0sNbGxdC+vsizqLKWgpKBdQCmm4rJxr7TyLfh0cLavrPXycfFsqm/qp22oZi4qJvVKpfhwWXXkwAAAABJRU5ErkJggg=="
-                className="object-cover object-center"
-                style={{ filter: "saturate(0.95)" }}
-              />
-              {/* Teal tint */}
-              <div className="absolute inset-0 bg-[#0F3D3E]/20 mix-blend-multiply" />
-            </div>
+    <section className="py-12 sm:py-16 bg-[#FAFCFC]">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative rounded-[32px] sm:rounded-[44px] overflow-hidden bg-[#0B3B4A] text-white p-8 sm:p-12 lg:p-16 shadow-2xl">
+          {/* Subtle background photo mask */}
+          <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+            <Image
+              src="/images/clinic-interior.webp"
+              alt={`${siteConfig.brand.name} ambience`}
+              fill
+              sizes="100vw"
+              className="object-cover"
+              loading="lazy"
+            />
           </div>
 
-          {/* ========================================================
-              CARD CONTENT
-              Staggered words in heading, real spaces, idle shine + pulse ring button
-             ======================================================== */}
-          <div className="relative z-10 p-6 pt-3 pb-8 sm:p-10 lg:p-14 md:max-w-[55%] flex flex-col items-start justify-center">
-            <h2
-              aria-label={hospitalConfig.ctaBanner.title}
-              className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight text-balance"
-            >
-              <span aria-hidden="true">
-                {titleWords.map((word, idx) => (
-                  <span
-                    key={idx}
-                    className="inline-block"
-                    style={{
-                      opacity: 0,
-                      animation: "heroFadeUp14 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards",
-                      animationDelay: `${150 + idx * 55}ms`,
-                      marginRight: "0.28em",
-                    }}
-                  >
-                    {word}{" "}
-                  </span>
-                ))}
-              </span>
-            </h2>
+          {/* Aqua radial glow */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#26B5AC]/20 blur-3xl pointer-events-none" />
 
-            <p className="mt-3 text-sm sm:text-base text-white/90 leading-relaxed max-w-lg">
-              {hospitalConfig.ctaBanner.subtext}
+          {/* Banner Content */}
+          <div className="relative z-10 max-w-2xl text-center sm:text-left">
+            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#26B5AC] border border-white/15 mb-4">
+              START YOUR SMILE JOURNEY
+            </span>
+            <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight text-balance">
+              {siteConfig.ctaBanner.title}
+            </h2>
+            <p className="mt-3.5 text-sm sm:text-base text-white/80 leading-relaxed text-balance">
+              {siteConfig.ctaBanner.subtitle}
             </p>
 
-            <Link
-              ref={btnRef}
-              href="/book"
-              onClick={onOpenBooking}
-              onPointerDown={createRipple}
-              style={{ "--shine-delay": "0.9s" } as React.CSSProperties}
-              className="btn-ripple-container btn-idle-shine cta-btn-pulse mt-6 w-full sm:w-auto min-h-[48px] px-8 py-3.5 rounded-full bg-[#CDEBD8] hover:bg-[#B2E0C2] text-[#0F3D3E] font-extrabold text-base btn-press btn-mint flex items-center justify-center gap-2.5 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8FBFA3] transition-all"
-            >
-              <CalendarIcon className="w-5 h-5 text-[#0F3D3E] shrink-0" />
-              <span>{hospitalConfig.ctaBanner.buttonText}</span>
-              <ArrowRightIcon className="w-4 h-4 text-[#0F3D3E] shrink-0 hidden sm:inline" />
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4">
+              {/* Primary Book CTA */}
+              <Link
+                ref={bookBtnRef}
+                href="/book"
+                onClick={handleBook}
+                onPointerDown={createRipple}
+                style={{ "--shine-delay": "0.3s" } as React.CSSProperties}
+                className="btn-idle-shine btn-ripple-container btn-press h-13 px-8 rounded-full bg-[#F2A65A] hover:bg-[#E09244] text-[#07252F] font-extrabold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-lg shadow-[#0B3B4A]/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#26B5AC] transition-all"
+              >
+                <CalendarIcon className="w-5 h-5 text-[#07252F] shrink-0" />
+                <span>{siteConfig.ctaBanner.buttonText}</span>
+                <ArrowRightIcon className="w-4 h-4 text-[#07252F]" />
 
-              {/* Touch ripples */}
-              {ripples.map((r) => (
-                <span
-                  key={r.id}
-                  className="btn-ripple-circle"
-                  style={{
-                    left: r.x,
-                    top: r.y,
-                    width: r.size,
-                    height: r.size,
-                    backgroundColor: r.color,
-                  }}
-                />
-              ))}
-            </Link>
+                {ripples.map((r) => (
+                  <span
+                    key={r.id}
+                    className="btn-ripple-circle"
+                    style={{
+                      left: r.x,
+                      top: r.y,
+                      width: r.size,
+                      height: r.size,
+                      backgroundColor: "rgba(255,255,255,0.4)",
+                    }}
+                  />
+                ))}
+              </Link>
+
+              {/* Secondary WhatsApp CTA */}
+              <a
+                href={buildWhatsAppLink(
+                  `Hello ${siteConfig.brand.name}, I am ready to book a consultation.`
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-press h-13 px-6 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md"
+              >
+                <WhatsAppIcon className="w-5 h-5 text-white" />
+                <span>{siteConfig.ctaBanner.whatsAppText}</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

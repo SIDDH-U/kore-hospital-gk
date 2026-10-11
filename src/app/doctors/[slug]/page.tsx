@@ -1,205 +1,155 @@
-import React, { Suspense } from "react";
+import React from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import { hospitalConfig, getSiteUrl } from "@/config/hospital";
+import Image from "next/image";
+import Link from "next/link";
+import { siteConfig, getSiteUrl, buildWhatsAppLink } from "@/config/site.config";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
-import { CtaBanner } from "@/components/CtaBanner";
-import {
-  CalendarIcon,
-  PhoneIcon,
-  ClockIcon,
-  CheckCircleIcon,
-  StethoscopeIcon,
-} from "@/components/Icons";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { CalendarIcon, WhatsAppIcon, ClockIcon, CheckCircleIcon } from "@/components/Icons";
 
-interface PageProps {
+interface DoctorPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return hospitalConfig.doctors.map((doc) => ({
-    slug: doc.slug,
+export async function generateStaticParams() {
+  return siteConfig.doctors.map((d) => ({
+    slug: d.slug,
   }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: DoctorPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const doctor = hospitalConfig.doctors.find((d) => d.slug === slug);
+  const doctor = siteConfig.doctors.find((d) => d.slug === slug);
 
   if (!doctor) {
-    return {
-      title: "Doctor Not Found",
-    };
+    return { title: "Doctor Not Found" };
   }
 
-  const siteUrl = getSiteUrl();
-  const pageUrl = `${siteUrl}/doctors/${doctor.slug}`;
-  const imageUrl = `${siteUrl}${doctor.image}`;
-
   return {
-    title: `${doctor.name} - ${doctor.speciality}`,
-    description: `${doctor.name}, ${doctor.speciality} at ${hospitalConfig.name}, Nanded. ${doctor.qualifications}, ${doctor.experience}. OPD: ${doctor.opdTimings}.`,
+    title: `${doctor.name} - ${doctor.role} | ${siteConfig.brand.name}`,
+    description: `${doctor.name} (${doctor.degrees}) is an experienced ${doctor.speciality} with ${doctor.experience} experience at ${siteConfig.brand.name}.`,
     alternates: {
-      canonical: pageUrl,
+      canonical: `${getSiteUrl()}/doctors/${doctor.slug}`,
     },
     openGraph: {
-      title: `${doctor.name} | ${doctor.speciality} | ${hospitalConfig.name}`,
+      title: `${doctor.name} | ${siteConfig.brand.name}`,
       description: doctor.shortBio,
-      url: pageUrl,
-      siteName: hospitalConfig.name,
-      images: [
-        {
-          url: imageUrl,
-          width: 800,
-          height: 1000,
-          alt: `${doctor.name} - ${doctor.speciality}`,
-        },
-      ],
-      locale: "en_IN",
-      type: "profile",
+      images: [{ url: `${getSiteUrl()}${doctor.image}` }],
     },
   };
 }
 
-export default function DoctorDetailPage({ params }: PageProps) {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-white" />}>
-      <DoctorContent params={params} />
-    </Suspense>
-  );
-}
-
-async function DoctorContent({ params }: PageProps) {
+export default async function DoctorProfilePage({ params }: DoctorPageProps) {
   const { slug } = await params;
-  const doctor = hospitalConfig.doctors.find((d) => d.slug === slug);
+  const doctor = siteConfig.doctors.find((d) => d.slug === slug);
 
   if (!doctor) {
-    return notFound();
+    notFound();
   }
 
-  const siteUrl = getSiteUrl();
-  const department = hospitalConfig.departments.find(
-    (dept) => dept.id === doctor.departmentId
-  );
-
-  const physicianJsonLd = {
+  const doctorJsonLd = {
     "@context": "https://schema.org",
     "@type": "Physician",
     name: doctor.name,
-    jobTitle: doctor.speciality,
-    description: doctor.shortBio,
-    image: `${siteUrl}${doctor.image}`,
-    telephone: hospitalConfig.contact.phoneRaw,
+    jobTitle: doctor.role,
     medicalSpecialty: doctor.speciality,
     worksFor: {
-      "@type": "Hospital",
-      name: hospitalConfig.name,
-      url: siteUrl,
-      telephone: hospitalConfig.contact.phoneRaw,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: hospitalConfig.location.address,
-        addressLocality: hospitalConfig.location.city,
-        addressRegion: hospitalConfig.location.state,
-        postalCode: hospitalConfig.location.pincode,
-        addressCountry: "IN",
-      },
+      "@type": "Dentist",
+      name: siteConfig.brand.name,
     },
+    image: `${getSiteUrl()}${doctor.image}`,
+    description: doctor.shortBio,
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#1F2D2B]">
+    <div className="min-h-screen flex flex-col bg-[#FAFCFC]">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(physicianJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(doctorJsonLd) }}
       />
+
       <TopStrip />
       <Header />
 
       <main className="flex-1 pb-16 lg:pb-0">
-        {/* Profile Header */}
-        <section className="bg-[#0F3D3E] text-white py-12 lg:py-16 rounded-b-[36px] lg:rounded-b-[48px]">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-[#CDEBD8] mb-6">
-              <Link href="/" className="hover:underline">
-                Home
-              </Link>
-              <span>/</span>
-              <Link href="/doctors" className="hover:underline">
-                Doctors
-              </Link>
-              <span>/</span>
-              <span className="text-white/60">{doctor.name}</span>
+        {/* Profile Hero */}
+        <section className="bg-[#0B3B4A] text-white py-12 sm:py-16">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <nav aria-label="Breadcrumb" className="mb-6">
+              <ol className="flex items-center gap-2 text-xs text-white/70">
+                <li>
+                  <Link href="/" className="hover:text-white transition-colors">
+                    Home
+                  </Link>
+                </li>
+                <li>/</li>
+                <li>
+                  <Link href="/doctors" className="hover:text-white transition-colors">
+                    Doctors
+                  </Link>
+                </li>
+                <li>/</li>
+                <li className="text-[#26B5AC] font-semibold">{doctor.name}</li>
+              </ol>
             </nav>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-              {/* Doctor Portrait Photo */}
-              <div className="md:col-span-5 lg:col-span-4">
-                <div className="relative w-full max-w-sm mx-auto aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 bg-[#144748]">
+              {/* Doctor Photo */}
+              <div className="md:col-span-4 lg:col-span-3">
+                <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
                   <Image
                     src={doctor.image}
                     alt={doctor.name}
                     fill
                     priority
-                    sizes="(max-width: 768px) 100vw, 380px"
+                    sizes="(max-width: 768px) 100vw, 30vw"
                     className="object-cover object-top"
                   />
                 </div>
               </div>
 
-              {/* Doctor Details */}
-              <div className="md:col-span-7 lg:col-span-8">
-                {department && (
-                  <Link
-                    href={`/departments/${department.slug}`}
-                    className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#CDEBD8]/20 text-[#CDEBD8] border border-[#CDEBD8]/30 mb-3 hover:bg-[#CDEBD8]/30 transition-colors"
-                  >
-                    Department of {department.name}
-                  </Link>
-                )}
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+              {/* Doctor Summary */}
+              <div className="md:col-span-8 lg:col-span-9 space-y-3">
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#26B5AC] border border-white/15">
+                  {doctor.speciality}
+                </span>
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
                   {doctor.name}
                 </h1>
-                <p className="mt-2 text-lg sm:text-xl font-bold text-[#CDEBD8]">
-                  {doctor.speciality}
+                <p className="text-base sm:text-lg text-[#F2A65A] font-semibold">
+                  {doctor.role}
                 </p>
-                <p className="mt-1 text-sm font-semibold text-white/80">
-                  {doctor.qualifications}
+                <p className="text-xs sm:text-sm text-white/70">
+                  {doctor.degrees} · {doctor.experience} Experience
                 </p>
 
-                {/* Key Badges */}
-                <div className="mt-5 flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 text-xs font-semibold text-white backdrop-blur-sm">
-                    <CheckCircleIcon className="w-4 h-4 text-[#2DA870]" />
-                    <span>{doctor.experience}</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 text-xs font-semibold text-white backdrop-blur-sm">
-                    <ClockIcon className="w-4 h-4 text-[#2DA870]" />
-                    <span>{doctor.opdTimings}</span>
-                  </div>
+                <div className="pt-2 text-xs text-[#E9F7F5] bg-white/10 p-3 rounded-xl inline-block border border-white/15">
+                  ✨ {doctor.highlight}
                 </div>
 
-                {/* Pre-filled "Book Appointment" Button */}
-                <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <Link
-                    href={`/book?doctor=${encodeURIComponent(doctor.slug)}&dept=${encodeURIComponent(doctor.departmentId)}`}
-                    className="min-h-[48px] px-8 py-3.5 rounded-full bg-[#CDEBD8] hover:bg-[#B2E0C2] text-[#0F3D3E] font-extrabold text-sm btn-press btn-mint flex items-center justify-center gap-2 shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
+                    href={`/book?doctor=${encodeURIComponent(doctor.name)}`}
+                    className="btn-idle-shine btn-press h-12 px-7 rounded-full bg-[#F2A65A] hover:bg-[#E09244] text-[#07252F] font-bold text-sm flex items-center justify-center gap-2 shadow-lg"
                   >
-                    <CalendarIcon className="w-4 h-4 text-[#0F3D3E]" />
-                    <span>Book Appointment with {doctor.name.split(" ")[1] || "Doctor"}</span>
+                    <CalendarIcon className="w-4 h-4 text-[#07252F]" />
+                    <span>Book Appointment with {doctor.name}</span>
                   </Link>
 
                   <a
-                    href={`tel:${hospitalConfig.contact.phoneRaw}`}
-                    className="min-h-[48px] px-6 py-3.5 rounded-full border border-white/30 text-white font-bold text-sm btn-press flex items-center justify-center gap-2 hover:bg-white/10"
+                    href={buildWhatsAppLink(
+                      `Hello ${siteConfig.brand.name}, I would like to book a visit with ${doctor.name}.`
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-press h-12 px-6 rounded-full bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-sm flex items-center justify-center gap-2"
                   >
-                    <PhoneIcon className="w-4 h-4 text-[#CDEBD8]" />
-                    <span>Call OPD: {hospitalConfig.contact.phone}</span>
+                    <WhatsAppIcon className="w-4 h-4 text-[#26B5AC]" />
+                    <span>Chat on WhatsApp</span>
                   </a>
                 </div>
               </div>
@@ -207,75 +157,51 @@ async function DoctorContent({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Doctor Bio and Clinical Schedule */}
-        <section className="py-12 sm:py-16 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-            <div className="lg:col-span-8 space-y-8">
-              {/* Short Bio */}
-              <div>
-                <h2 className="text-2xl font-extrabold text-[#0F3D3E] mb-3">
-                  About {doctor.name}
-                </h2>
-                <p className="text-base sm:text-lg text-[#536462] leading-relaxed">
-                  {doctor.shortBio}
-                </p>
-                <p className="mt-4 text-sm text-[#536462] leading-relaxed">
-                  As part of the senior clinical faculty at LifeCare Hospital in Nanded, {doctor.name} is committed to evidence-based practice, personalized patient consultations, and comprehensive treatment planning.
-                </p>
-              </div>
-
-              {/* Consultation Timings Box */}
-              <div className="p-6 rounded-3xl bg-[#F7F5EF] border border-[#EBE7DC]">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#0F3D3E] text-[#CDEBD8] flex items-center justify-center font-bold">
-                    <ClockIcon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-extrabold text-[#0F3D3E]">
-                      Outpatient (OPD) Schedule
-                    </h3>
-                    <p className="text-xs text-[#536462]">
-                      Appointments are scheduled in 15-minute consultation slots
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-white border border-[#EBE7DC] flex items-center justify-between">
-                  <span className="text-sm font-semibold text-[#1F2D2B]">Regular Consultation Hours</span>
-                  <span className="text-sm font-bold text-[#2DA870]">{doctor.opdTimings}</span>
+        {/* Detailed Info */}
+        <section className="py-14 sm:py-20">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+              {/* Bio & Approach (8 cols) */}
+              <div className="lg:col-span-8 space-y-6">
+                <div className="p-8 rounded-3xl bg-white border border-gray-200/80 shadow-sm">
+                  <h2 className="font-display text-2xl font-bold text-[#0B3B4A] mb-4">
+                    About {doctor.name}
+                  </h2>
+                  <p className="text-sm sm:text-base text-[#5B7480] leading-relaxed">
+                    {doctor.shortBio}
+                  </p>
+                  <p className="text-sm sm:text-base text-[#5B7480] leading-relaxed mt-4">
+                    At {siteConfig.brand.name}, {doctor.name} focuses on patient-first, painless dentistry using state-of-the-art 3D digital imaging, computerized anesthesia, and minimally invasive techniques to ensure your comfort is the priority at every appointment.
+                  </p>
                 </div>
               </div>
-            </div>
 
-            {/* Sidebar */}
-            <div className="lg:col-span-4">
-              <div className="p-6 rounded-3xl bg-[#EBF7F0] border border-[#D8EDE0] sticky top-24">
-                <div className="flex items-center gap-3 mb-4">
-                  <StethoscopeIcon className="w-6 h-6 text-[#2DA870]" />
-                  <h3 className="text-base font-extrabold text-[#0F3D3E]">
-                    Need Immediate Care?
-                  </h3>
+              {/* Consultation Timings (4 cols) */}
+              <div className="lg:col-span-4 p-6 sm:p-8 rounded-3xl bg-[#E9F7F5] border border-[#26B5AC]/20 shadow-sm space-y-4">
+                <h3 className="font-display text-lg font-bold text-[#0B3B4A]">
+                  Consultation Timings
+                </h3>
+                <div className="flex items-start gap-3 text-xs sm:text-sm text-[#0B3B4A]">
+                  <ClockIcon className="w-4 h-4 text-[#26B5AC] shrink-0 mt-0.5" />
+                  <span>{doctor.timings}</span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#536462] leading-relaxed mb-4">
-                  For acute symptoms or emergency admissions, our 24/7 Casualty and Trauma wing is always staffed with critical care officers.
-                </p>
-                <a
-                  href={`tel:${hospitalConfig.contact.emergencyPhoneRaw}`}
-                  className="w-full min-h-[44px] py-2.5 px-4 rounded-full bg-[#E53E3E] text-white text-xs font-bold btn-press flex items-center justify-center gap-2 shadow"
-                >
-                  <PhoneIcon className="w-4 h-4 text-white" />
-                  <span>Emergency: {hospitalConfig.contact.emergencyPhone}</span>
-                </a>
+                <div className="pt-4 border-t border-[#26B5AC]/20">
+                  <Link
+                    href={`/book?doctor=${encodeURIComponent(doctor.name)}`}
+                    className="btn-press w-full py-3 rounded-full bg-[#0B3B4A] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm text-center"
+                  >
+                    <CalendarIcon className="w-3.5 h-3.5 text-[#F2A65A]" />
+                    <span>Reserve Time Slot</span>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </section>
-
-        {/* Closing CTA */}
-        <CtaBanner />
       </main>
 
       <Footer />
+      <FloatingWhatsApp />
       <StickyActionBar />
     </div>
   );

@@ -1,25 +1,25 @@
 import React from "react";
 import type { Metadata } from "next";
-import { hospitalConfig, getSiteUrl } from "@/config/hospital";
+import { siteConfig, getSiteUrl } from "@/config/site.config";
 import { HomeClient } from "@/components/HomeClient";
 
 export const metadata: Metadata = {
-  title: `${hospitalConfig.name} - Multi-Speciality Healthcare in Nanded, Maharashtra`,
-  description: hospitalConfig.fullDescription,
+  title: `${siteConfig.brand.name} | ${siteConfig.brand.tagline}`,
+  description: siteConfig.brand.fullDescription,
   alternates: {
     canonical: `${getSiteUrl()}/`,
   },
   openGraph: {
-    title: `${hospitalConfig.name} - Multi-Speciality Healthcare in Nanded`,
-    description: hospitalConfig.description,
+    title: `${siteConfig.brand.name} - ${siteConfig.brand.tagline}`,
+    description: siteConfig.brand.description,
     url: `${getSiteUrl()}/`,
-    siteName: hospitalConfig.name,
+    siteName: siteConfig.brand.name,
     images: [
       {
         url: `${getSiteUrl()}/images/hero-desktop.webp`,
-        width: 1200,
-        height: 630,
-        alt: `${hospitalConfig.name} - Multi-Speciality Hospital in Nanded`,
+        width: 1600,
+        height: 900,
+        alt: `${siteConfig.brand.name} - Luxury Dental Studio`,
       },
     ],
     locale: "en_IN",
@@ -28,23 +28,23 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const hospitalJsonLd = {
+  const dentalJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Hospital",
-    name: hospitalConfig.name,
-    legalName: hospitalConfig.legalName,
-    description: hospitalConfig.description,
+    "@type": "Dentist",
+    name: siteConfig.brand.name,
+    legalName: siteConfig.brand.legalName,
+    description: siteConfig.brand.fullDescription,
     url: getSiteUrl(),
-    telephone: hospitalConfig.contact.phoneRaw,
-    emergencyTelephone: hospitalConfig.contact.emergencyPhoneRaw,
-    email: hospitalConfig.contact.email,
+    telephone: siteConfig.contact.phoneRaw,
+    email: siteConfig.contact.email,
     image: `${getSiteUrl()}/images/hero-desktop.webp`,
+    priceRange: "$$",
     address: {
       "@type": "PostalAddress",
-      streetAddress: hospitalConfig.location.address,
-      addressLocality: hospitalConfig.location.city,
-      addressRegion: hospitalConfig.location.state,
-      postalCode: hospitalConfig.location.pincode,
+      streetAddress: siteConfig.brand.address,
+      addressLocality: siteConfig.brand.city,
+      addressRegion: siteConfig.brand.state,
+      postalCode: siteConfig.brand.pincode,
       addressCountry: "IN",
     },
     geo: {
@@ -56,40 +56,31 @@ export default function HomePage() {
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        opens: "08:00",
-        closes: "20:00",
+        opens: "09:00",
+        closes: "20:30",
       },
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday",
-        ],
-        opens: "00:00",
-        closes: "23:59",
+        dayOfWeek: ["Sunday"],
+        opens: "10:00",
+        closes: "14:00",
       },
     ],
     medicalSpecialty: [
-      "Cardiovascular",
-      "Orthopedics",
-      "Pediatrics",
-      "Neurology",
-      "Gynecology",
-      "GeneralMedicine",
+      "Dentistry",
+      "Orthodontics",
+      "Periodontics",
+      "Endodontics",
+      "PediatricDentistry",
+      "Prosthodontics",
     ],
-    priceRange: "$$",
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(hospitalJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dentalJsonLd) }}
       />
       <HomeClient />
     </>

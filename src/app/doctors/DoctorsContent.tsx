@@ -52,7 +52,7 @@ export function DoctorsContent() {
               Find Your Specialist Doctor
             </h1>
             <p className="mt-3.5 text-base sm:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Meet our board-certified surgeons and consultant physicians delivering specialized medical care at LifeCare Hospital in Nanded.
+              Meet our board-certified surgeons and consultant physicians delivering specialized medical care at {hospitalConfig.name} in {hospitalConfig.location.city}.
             </p>
           </div>
         </section>

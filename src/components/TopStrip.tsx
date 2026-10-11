@@ -1,102 +1,56 @@
 import React from "react";
-import { hospitalConfig } from "@/config/hospital";
-import {
-  PhoneIcon,
-  MailIcon,
-  CheckCircleIcon,
-  FacebookIcon,
-  InstagramIcon,
-  LinkedinIcon,
-} from "./Icons";
+import { siteConfig } from "@/config/site.config";
+import { PhoneIcon, ClockIcon, MapPinIcon } from "./Icons";
 
 export function TopStrip() {
   return (
-    <div className="bg-[#EBF7F0] border-b border-[#D8EDE0] text-xs font-medium text-charcoal">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Mobile View: Centered high-priority emergency tap target */}
-        <div className="lg:hidden flex items-center justify-center py-2">
+    <div className="bg-[#0B3B4A] text-white text-xs border-b border-white/10 font-medium">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Mobile View: High priority phone tap target */}
+        <div className="lg:hidden flex items-center justify-between py-2">
+          <div className="flex items-center gap-1.5 text-white/90 truncate text-[11px] sm:text-xs">
+            <ClockIcon className="w-3.5 h-3.5 text-[#26B5AC] shrink-0" />
+            <span className="truncate">{siteConfig.hours.display}</span>
+          </div>
           <a
-            href={`tel:${hospitalConfig.contact.emergencyPhoneRaw}`}
-            className="inline-flex items-center gap-1.5 font-bold text-[#E53E3E] hover:text-[#C53030] transition-colors py-0.5 px-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E53E3E]"
-            aria-label={`Emergency Call: ${hospitalConfig.contact.emergencyPhone}`}
+            href={`tel:${siteConfig.contact.phoneRaw}`}
+            className="inline-flex items-center gap-1.5 font-bold text-[#F2A65A] hover:text-[#e09244] transition-colors py-0.5 px-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#26B5AC] shrink-0 text-xs"
+            aria-label={`Call Clinic: ${siteConfig.contact.phone}`}
           >
-            <PhoneIcon className="w-3.5 h-3.5 text-[#E53E3E] shrink-0" />
-            <span>24/7 Emergency: {hospitalConfig.contact.emergencyPhone}</span>
+            <PhoneIcon className="w-3.5 h-3.5 text-[#F2A65A]" />
+            <span>{siteConfig.contact.phone}</span>
           </a>
         </div>
 
-        {/* Desktop View (1024px+): Left Info & Right Emergency + Socials */}
+        {/* Desktop View (1024px+): Address, Hours & Direct Contact */}
         <div className="hidden lg:flex items-center justify-between py-2">
-          {/* Left Side */}
-          <div className="flex items-center gap-6 text-[#1F2D2B]">
-            <span className="inline-flex items-center gap-1.5 font-medium text-[#1F2D2B]">
-              <CheckCircleIcon className="w-4 h-4 text-[#2DA870]" />
-              Trusted multi-speciality care
+          {/* Left Info: Address & Working Hours */}
+          <div className="flex items-center gap-6 text-white/80">
+            <span className="inline-flex items-center gap-2">
+              <MapPinIcon className="w-3.5 h-3.5 text-[#26B5AC] shrink-0" />
+              <span>{siteConfig.brand.fullAddress}</span>
             </span>
-            <span className="text-[#8FBFA3]">|</span>
-            <a
-              href={`mailto:${hospitalConfig.contact.email}`}
-              className="inline-flex items-center gap-1.5 text-[#1F2D2B] hover:text-[#0F3D3E] transition-colors"
-            >
-              <MailIcon className="w-3.5 h-3.5 text-[#0F3D3E]" />
-              {hospitalConfig.contact.email}
-            </a>
+            <span className="text-white/20">|</span>
+            <span className="inline-flex items-center gap-2">
+              <ClockIcon className="w-3.5 h-3.5 text-[#26B5AC] shrink-0" />
+              <span>{siteConfig.hours.display}</span>
+            </span>
           </div>
 
-          {/* Right Side */}
-          <div className="flex items-center gap-6">
+          {/* Right Info: Phone & Consultation Callout */}
+          <div className="flex items-center gap-5">
+            <span className="inline-flex items-center gap-1.5 text-white/90 font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#26B5AC] animate-pulse"></span>
+              Painless & 3D Digital Care
+            </span>
+            <span className="text-white/20">|</span>
             <a
-              href={`tel:${hospitalConfig.contact.emergencyPhoneRaw}`}
-              className="inline-flex items-center gap-1.5 font-bold text-[#E53E3E] hover:text-[#C53030] transition-colors"
+              href={`tel:${siteConfig.contact.phoneRaw}`}
+              className="inline-flex items-center gap-2 font-bold text-[#F2A65A] hover:text-[#e09244] transition-colors"
             >
-              <PhoneIcon className="w-3.5 h-3.5 text-[#E53E3E]" />
-              <span>24/7 Emergency: {hospitalConfig.contact.emergencyPhone}</span>
+              <PhoneIcon className="w-3.5 h-3.5 text-[#F2A65A]" />
+              <span>{siteConfig.contact.phone}</span>
             </a>
-            {Boolean(
-              hospitalConfig.socials.facebook ||
-                hospitalConfig.socials.instagram ||
-                hospitalConfig.socials.linkedin ||
-                hospitalConfig.socials.youtube
-            ) && (
-              <>
-                <span className="text-[#8FBFA3]">|</span>
-                <div className="flex items-center gap-3 text-[#1F2D2B]">
-                  {hospitalConfig.socials.facebook && (
-                    <a
-                      href={hospitalConfig.socials.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Facebook"
-                      className="hover:text-[#0F3D3E] transition-colors p-1"
-                    >
-                      <FacebookIcon className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                  {hospitalConfig.socials.instagram && (
-                    <a
-                      href={hospitalConfig.socials.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Instagram"
-                      className="hover:text-[#0F3D3E] transition-colors p-1"
-                    >
-                      <InstagramIcon className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                  {hospitalConfig.socials.linkedin && (
-                    <a
-                      href={hospitalConfig.socials.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="LinkedIn"
-                      className="hover:text-[#0F3D3E] transition-colors p-1"
-                    >
-                      <LinkedinIcon className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                </div>
-              </>
-            )}
           </div>
         </div>
       </div>

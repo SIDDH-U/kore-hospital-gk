@@ -57,7 +57,7 @@ export function About() {
             >
               <Image
                 src="/images/about-consulting.webp"
-                alt="Experienced medical doctors consulting at LifeCare Hospital Nanded"
+                alt={`Experienced medical doctors consulting at ${hospitalConfig.name} ${hospitalConfig.location.city}`}
                 width={650}
                 height={420}
                 sizes="(max-width: 1024px) 100vw, 650px"
@@ -122,7 +122,7 @@ export function About() {
             >
               <Image
                 src="/images/about-patient-care.webp"
-                alt="Compassionate patient care by LifeCare nurse"
+                alt={`Compassionate patient care by ${hospitalConfig.name} nurse`}
                 width={350}
                 height={240}
                 sizes="(min-width: 1024px) 350px, 0vw"

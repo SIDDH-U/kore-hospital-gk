@@ -86,7 +86,7 @@ export function DepartmentsContent() {
                   <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#E2EBE5] mb-4">
                     <Image
                       src={`/images/departments/${dept.slug}.jpg`}
-                      alt={`LifeCare Hospital Department of ${dept.name}`}
+                      alt={`${hospitalConfig.name} Department of ${dept.name}`}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover hover-img-zoom touch-img-zoom"

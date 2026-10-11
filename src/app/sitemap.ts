@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { hospitalConfig, getSiteUrl } from "@/config/hospital";
+import { siteConfig, getSiteUrl } from "@/config/site.config";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = getSiteUrl();
@@ -13,39 +13,45 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
+      url: `${siteUrl}/treatments`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    ...(siteConfig.sections.showGallery
+      ? [
+          {
+            url: `${siteUrl}/gallery`,
+            lastModified,
+            changeFrequency: "weekly" as const,
+            priority: 0.9,
+          },
+        ]
+      : []),
+    ...(siteConfig.sections.showDoctors
+      ? [
+          {
+            url: `${siteUrl}/doctors`,
+            lastModified,
+            changeFrequency: "weekly" as const,
+            priority: 0.9,
+          },
+        ]
+      : []),
+    ...(siteConfig.sections.showReviews
+      ? [
+          {
+            url: `${siteUrl}/reviews`,
+            lastModified,
+            changeFrequency: "weekly" as const,
+            priority: 0.85,
+          },
+        ]
+      : []),
+    {
       url: `${siteUrl}/about`,
       lastModified,
       changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/departments`,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/doctors`,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/services`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/patient-info`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/blog`,
-      lastModified,
-      changeFrequency: "weekly",
       priority: 0.8,
     },
     {
@@ -74,26 +80,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const departmentRoutes: MetadataRoute.Sitemap = hospitalConfig.departments.map((dept) => ({
-    url: `${siteUrl}/departments/${dept.slug}`,
+  const treatmentRoutes: MetadataRoute.Sitemap = siteConfig.treatments.map((t) => ({
+    url: `${siteUrl}/treatments/${t.slug}`,
     lastModified,
     changeFrequency: "weekly",
-    priority: 0.85,
+    priority: 0.9,
   }));
 
-  const doctorRoutes: MetadataRoute.Sitemap = hospitalConfig.doctors.map((doctor) => ({
-    url: `${siteUrl}/doctors/${doctor.slug}`,
-    lastModified,
-    changeFrequency: "weekly",
-    priority: 0.85,
-  }));
+  const doctorRoutes: MetadataRoute.Sitemap = siteConfig.sections.showDoctors
+    ? siteConfig.doctors.map((d) => ({
+        url: `${siteUrl}/doctors/${d.slug}`,
+        lastModified,
+        changeFrequency: "weekly",
+        priority: 0.85,
+      }))
+    : [];
 
-  const blogRoutes: MetadataRoute.Sitemap = hospitalConfig.blogArticles.map((article) => ({
-    url: `${siteUrl}/blog/${article.slug}`,
-    lastModified,
-    changeFrequency: "monthly",
-    priority: 0.75,
-  }));
-
-  return [...staticRoutes, ...departmentRoutes, ...doctorRoutes, ...blogRoutes];
+  return [...staticRoutes, ...treatmentRoutes, ...doctorRoutes];
 }

@@ -33,7 +33,7 @@ export function ContactContent() {
     const trimmedMsg = formData.message.trim().slice(0, 500);
 
     const lines: string[] = [
-      "New Enquiry - LifeCare Hospital",
+      `New Enquiry - ${hospitalConfig.name}`,
       `Name: ${trimmedName}`,
       `Phone: ${cleanPhone}`,
     ];
@@ -72,10 +72,10 @@ export function ContactContent() {
               WE ARE HERE FOR YOU
             </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight text-balance">
-              Get in Touch with LifeCare Hospital
+              Get in Touch with {hospitalConfig.name}
             </h1>
             <p className="mt-3.5 text-base sm:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Have questions about doctor consultations, hospital admissions, or diagnostic reports? Reach out to our 24/7 support desk in Nanded.
+              Have questions about doctor consultations, hospital admissions, or diagnostic reports? Reach out to our 24/7 support desk in {hospitalConfig.location.city}.
             </p>
           </div>
         </section>
@@ -303,7 +303,7 @@ export function ContactContent() {
             <div className="p-4 sm:p-6 border-b border-[#EBE7DC] flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white">
               <div>
                 <h3 className="text-lg font-extrabold text-[#0F3D3E]">
-                  Find Us in Nanded, Maharashtra
+                  Find Us in {hospitalConfig.location.city}, {hospitalConfig.location.state}
                 </h3>
                 <p className="text-xs text-[#536462]">
                   {hospitalConfig.location.fullAddress}
@@ -335,10 +335,10 @@ export function ContactContent() {
                   <MapPinIcon className="w-6 h-6" />
                 </div>
                 <h4 className="font-extrabold text-[#0F3D3E] text-base">
-                  LifeCare Hospital Nanded
+                  {hospitalConfig.name} {hospitalConfig.location.city}
                 </h4>
                 <p className="text-xs text-[#536462] mt-1">
-                  123 Healthcare Road, Nanded 431601
+                  {hospitalConfig.location.fullAddress}
                 </p>
                 <span className="mt-2 text-[11px] font-bold text-[#2DA870]">
                   Convenient Ambulance & Patient Parking On-Site
