@@ -10,7 +10,7 @@ import { ContactSection } from "@/components/ContactSection";
 
 export const metadata: Metadata = {
   title: `Contact Us & Directions | ${siteConfig.brand.name}`,
-  description: `Contact ${siteConfig.brand.name}. Schedule a consultation via WhatsApp or phone. Located at ${siteConfig.brand.fullAddress}.`,
+  description: `Contact ${siteConfig.brand.name} in Gangakhed. Schedule a consultation via WhatsApp or phone. Located at ${siteConfig.brand.fullAddress}.`,
   alternates: {
     canonical: `${getSiteUrl()}/contact`,
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFCFC]">
+    <div className="min-h-screen flex flex-col bg-[#F2F8F6]">
       <TopStrip />
       <Header />
 

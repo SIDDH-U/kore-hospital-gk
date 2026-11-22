@@ -1,18 +1,23 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { siteConfig, getSiteUrl } from "@/config/site.config";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { ArrowRightIcon, CalendarIcon, SparklesIcon } from "@/components/Icons";
+import {
+  DoctorMaleAvatar,
+  DoctorFemaleAvatar,
+  PhoneIcon,
+  CalendarIcon,
+  ShieldCheckIcon,
+} from "@/components/Icons";
 
 export const metadata: Metadata = {
-  title: `Our Dental Specialists | ${siteConfig.brand.name}`,
-  description: `Meet our senior dental specialists: Orthodontists, Implantologists, Endodontists, and Pediatric dentists at ${siteConfig.brand.name}.`,
+  title: `Our Doctors | ${siteConfig.brand.name}`,
+  description: `Meet Dr. Anant Kamaji Kore and Dr. Kiran Anant Kore at ${siteConfig.brand.name}, Gangakhed. Specialists in ano-rectal care and Ksharsutra therapy.`,
   alternates: {
     canonical: `${getSiteUrl()}/doctors`,
   },
@@ -22,90 +27,93 @@ export default function DoctorsPage() {
   const doctors = siteConfig.doctors;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFCFC]">
+    <div className="min-h-screen flex flex-col bg-[#EAF6F2]">
       <TopStrip />
       <Header />
 
       <main className="flex-1 pb-16 lg:pb-0">
         {/* Page Hero */}
-        <section className="bg-[#0B3B4A] text-white py-14 sm:py-20 text-center">
+        <section className="bg-[#052F29] text-white py-12 sm:py-16 text-center">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#26B5AC] border border-white/15 mb-3">
-              <SparklesIcon className="w-3.5 h-3.5" />
-              SPECIALIST CLINICAL TEAM
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-white/10 text-[#F5A524] border border-white/15 mb-3">
+              <ShieldCheckIcon className="w-3.5 h-3.5" />
+              <span>Specialist medical faculty</span>
             </span>
             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
-              Meet Our Specialist Dentists
+              Our Specialist Doctors
             </h1>
-            <p className="mt-3.5 text-sm sm:text-base text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Every procedure is delivered by a master degree holder (MDS) specializing exclusively in their field with gentle hands and reassuring care.
+            <p className="mt-3.5 text-sm sm:text-base text-white/85 max-w-2xl mx-auto leading-relaxed">
+              Consult with Dr. Anant Kamaji Kore and Dr. Kiran Anant Kore for ethical, confidential, and time-tested anorectal care in Gangakhed.
             </p>
           </div>
         </section>
 
-        {/* Doctors Grid */}
-        <section className="py-16 sm:py-20">
-          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {doctors.map((doc) => (
-                <div
-                  key={doc.id}
-                  className="flex flex-col rounded-3xl bg-white border border-gray-200/80 overflow-hidden shadow-sm hover:shadow-lg transition-all card-press"
-                >
-                  <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-100">
-                    <Image
-                      src={doc.image}
-                      alt={doc.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-cover object-top hover-img-zoom"
-                    />
-                    <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#0B3B4A]/85 text-white backdrop-blur-sm">
-                      {doc.experience}
-                    </span>
-                    {siteConfig.sampleMode && (
-                      <span className="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-50/90 text-amber-800 border border-amber-300 backdrop-blur-sm">
-                        Sample
-                      </span>
-                    )}
-                  </div>
+        {/* Doctors Grid - Exactly 2 Doctors */}
+        <section className="py-14 sm:py-20">
+          <div className="max-w-[880px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {doctors.map((doc) => {
+                const isFemale = doc.avatar === "female";
 
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h2 className="font-display text-lg sm:text-xl font-bold text-[#0B3B4A]">
-                        {doc.name}
-                      </h2>
-                      <p className="text-xs font-semibold text-[#26B5AC] mt-0.5">
-                        {doc.role}
-                      </p>
-                      <p className="text-[11px] text-[#5B7480] mt-1">
-                        {doc.degrees}
-                      </p>
-                      <p className="text-xs text-[#5B7480] mt-3 leading-relaxed line-clamp-3">
-                        {doc.shortBio}
-                      </p>
+                return (
+                  <div
+                    key={doc.id}
+                    className="flex flex-col items-center text-center p-8 rounded-3xl bg-white border border-[#D5E6E0] shadow-xs hover:shadow-md transition-all card-press"
+                  >
+                    {/* Clean Generic Person SVG Avatar (Zero Photos Used) */}
+                    <div className="w-32 h-32 rounded-full overflow-hidden mb-5 bg-[#EAF6F2] p-2 border-2 border-[#D5E6E0] shadow-sm">
+                      {isFemale ? (
+                        <DoctorFemaleAvatar className="w-full h-full" />
+                      ) : (
+                        <DoctorMaleAvatar className="w-full h-full" />
+                      )}
                     </div>
 
-                    <div className="mt-6 pt-4 border-t border-gray-100 space-y-2">
-                      <Link
-                        href={`/doctors/${doc.slug}`}
-                        className="btn-press w-full py-2.5 rounded-full text-xs font-bold text-[#0B3B4A] bg-[#E9F7F5] hover:bg-[#D4EFEA] flex items-center justify-center gap-1.5 transition-colors"
+                    <h2 className="font-serif text-2xl font-bold text-[#064B40]">
+                      {doc.name}
+                    </h2>
+
+                    <p className="text-sm font-semibold text-[#0B7A68] mt-1">
+                      {doc.qualification}
+                    </p>
+
+                    <div className="mt-3 inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-[#EAF6F2] text-[#064B40] border border-[#D5E6E0]">
+                      {doc.specialty}
+                    </div>
+
+                    {isFemale && (
+                      <p className="text-xs text-[#3F5652] mt-3">
+                        Lady doctor available for female patients ensuring comfort and complete privacy.
+                      </p>
+                    )}
+
+                    {/* Action CTAs */}
+                    <div className="mt-7 pt-5 border-t border-gray-100 w-full flex flex-col sm:flex-row items-center gap-3">
+                      <a
+                        href={`tel:${doc.phoneRaw || siteConfig.contact.phoneRaw}`}
+                        className="btn-press w-full py-2.5 rounded-full text-xs font-bold text-[#064B40] bg-[#EAF6F2] hover:bg-[#E1EFEA] border border-[#D5E6E0] flex items-center justify-center gap-1.5 transition-colors"
                       >
-                        <span>View Profile</span>
-                        <ArrowRightIcon className="w-3.5 h-3.5 text-[#0B3B4A]" />
-                      </Link>
+                        <PhoneIcon className="w-3.5 h-3.5 text-[#0B7A68]" />
+                        <span>Call Doctor</span>
+                      </a>
 
                       <Link
                         href={`/book?doctor=${encodeURIComponent(doc.name)}`}
-                        className="btn-press w-full py-2.5 rounded-full text-xs font-bold text-[#07252F] bg-[#F2A65A] hover:bg-[#E09244] flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                        className="btn-press w-full py-2.5 rounded-full text-xs font-extrabold text-[#064B40] bg-[#F5A524] hover:bg-[#E09419] flex items-center justify-center gap-1.5 transition-colors shadow-xs"
                       >
-                        <CalendarIcon className="w-3.5 h-3.5 text-[#07252F]" />
-                        <span>Book Visit</span>
+                        <CalendarIcon className="w-3.5 h-3.5 text-[#064B40]" />
+                        <span>Book appointment</span>
                       </Link>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+
+            {/* Note on Medical Consultation */}
+            <div className="mt-12 p-5 rounded-2xl bg-white border border-[#D5E6E0] text-xs text-[#3F5652] text-center max-w-xl mx-auto leading-relaxed">
+              <p className="font-bold text-[#064B40] mb-1">Dignified, Respectful Consultations</p>
+              <p>Both male and female doctors are available to ensure that all patients—including women and elderly family members—feel entirely comfortable during examination and treatment.</p>
             </div>
           </div>
         </section>

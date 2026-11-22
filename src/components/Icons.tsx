@@ -536,48 +536,7 @@ export function LeafIcon({ className = "w-5 h-5", size, ...props }: IconProps) {
   );
 }
 
-/* Thin-line Dental Icons */
-export function ToothIcon({ className = "w-6 h-6", size, ...props }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      {...props}
-    >
-      <path d="M12 4.5c-3.2 0-5 2.5-5 6 0 2.8 1.1 5.3 2.8 8.2.7 1.1 1.6 1.1 2-.3.3-1.1.2-2.2.2-3.4 0 1.2-.1 2.3.2 3.4.4 1.4 1.3 1.4 2 .3 1.7-2.9 2.8-5.4 2.8-8.2 0-3.5-1.8-6-5-6Z" />
-      <path d="M10 9.5c.8.8 2.2.8 3 0" />
-    </svg>
-  );
-}
 
-export function SmileIcon({ className = "w-6 h-6", size, ...props }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      {...props}
-    >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-      <line x1="9" x2="9.01" y1="9" y2="9" strokeWidth="2.5" />
-      <line x1="15" x2="15.01" y1="9" y2="9" strokeWidth="2.5" />
-    </svg>
-  );
-}
 
 export function SparklesIcon({ className = "w-6 h-6", size, ...props }: IconProps) {
   return (
@@ -890,5 +849,64 @@ export function DoctorBadgeIcon({ className = "w-5 h-5", size, ...props }: IconP
     </svg>
   );
 }
+
+export function DoctorMaleAvatar({ className = "w-full h-full" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <circle cx="80" cy="80" r="76" fill="#F2F8F6" stroke="#D6E5E1" strokeWidth="3" />
+      <circle cx="80" cy="55" r="26" fill="#0F6B5C" />
+      {/* Male Hair Accent */}
+      <path d="M56 50 C56 36, 68 28, 80 28 C92 28, 104 36, 104 50 C96 46, 88 44, 80 44 C72 44, 64 46, 56 50 Z" fill="#0A4A40" />
+      {/* Coat / Shoulders */}
+      <path d="M34 135 C34 102, 54 92, 80 92 C106 92, 126 102, 126 135 Z" fill="#FFFFFF" stroke="#0F6B5C" strokeWidth="2.5" />
+      {/* Lapels / Tie */}
+      <polygon points="80,92 70,122 80,135 90,122" fill="#E8A33D" />
+      {/* Stethoscope */}
+      <path d="M62 95 C62 114, 72 124, 80 124 C88 124, 98 114, 98 95" stroke="#0A4A40" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <circle cx="98" cy="116" r="4" fill="#E8A33D" stroke="#0A4A40" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+export function DoctorFemaleAvatar({ className = "w-full h-full" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <circle cx="80" cy="80" r="76" fill="#F2F8F6" stroke="#D6E5E1" strokeWidth="3" />
+      {/* Female Hair Behind */}
+      <path d="M50 62 C50 36, 62 26, 80 26 C98 26, 110 36, 110 62 C112 76, 108 86, 106 95 C100 95, 98 84, 98 76 C98 52, 90 40, 80 40 C70 40, 62 52, 62 76 C62 84, 60 95, 54 95 C52 86, 48 76, 50 62 Z" fill="#0A4A40" />
+      <circle cx="80" cy="56" r="23" fill="#0F6B5C" />
+      {/* Coat / Shoulders */}
+      <path d="M36 135 C36 104, 54 94, 80 94 C106 94, 124 104, 124 135 Z" fill="#FFFFFF" stroke="#0F6B5C" strokeWidth="2.5" />
+      {/* V-neck / Scarf */}
+      <polygon points="80,94 72,118 80,128 88,118" fill="#E8A33D" />
+      {/* Stethoscope */}
+      <path d="M64 96 C64 114, 72 122, 80 122 C88 122, 96 114, 96 96" stroke="#0A4A40" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <circle cx="96" cy="116" r="4" fill="#E8A33D" stroke="#0A4A40" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+export function CaduceusCrossIcon({ className = "w-6 h-6", size, ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" strokeWidth="2" />
+      <path d="M7 6c2-1 4-1 5 1s3 2 5 1" stroke="currentColor" />
+      <path d="M7 12c2-1 4-1 5 1s3 2 5 1" stroke="currentColor" />
+      <circle cx="12" cy="3" r="1.5" fill="currentColor" />
+    </svg>
+  );
+}
+
 
 

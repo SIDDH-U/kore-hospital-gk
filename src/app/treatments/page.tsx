@@ -1,93 +1,146 @@
+"use client";
+
 import React from "react";
-import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
-import { siteConfig, getSiteUrl } from "@/config/site.config";
+import { siteConfig } from "@/config/site.config";
+import { useLanguage } from "@/context/LanguageContext";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { ArrowRightIcon, SparkleIcon } from "@/components/Icons";
-
-export const metadata: Metadata = {
-  title: `Treatments & Services | ${siteConfig.brand.name}`,
-  description: "Explore our comprehensive suite of gentle, modern dental treatments. From clear aligners to titanium implants and pain-free root canals.",
-  alternates: {
-    canonical: `${getSiteUrl()}/treatments`,
-  },
-};
+import { ConditionDiagram } from "@/components/ConditionDiagram";
+import { ArrowRight, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 export default function TreatmentsPage() {
+  const { isMarathi } = useLanguage();
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFCFC]">
+    <div className="min-h-screen flex flex-col bg-white text-[#0F2321]">
       <TopStrip />
       <Header />
 
       <main className="flex-1 pb-20 lg:pb-0">
         {/* Page Hero */}
-        <section className="bg-[#0B3B4A] text-white py-12 sm:py-16">
+        <section className="bg-gradient-to-b from-[#EAF6F2] via-[#F4FAF8] to-white py-10 sm:py-14 border-b border-[#D5E6E0]">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#26B5AC] border border-white/15 mb-3">
-              <SparkleIcon className="w-3.5 h-3.5" />
-              SPECIALIST CLINICAL DIRECTORY
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EAF6F2] text-[#064B40] border border-[#D5E6E0] mb-3">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#0B7A68]" />
+              <span>{isMarathi ? "सर्वसमावेशक मार्गदर्शक" : "Specialist proctology directory"}</span>
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight text-balance">
-              Comprehensive Dental Treatments
+
+            <h1
+              className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064B40] tracking-tight text-balance"
+              lang={isMarathi ? "mr" : "en"}
+            >
+              {isMarathi ? "मुळव्याध, फिशर व फिस्टुला उपचार सेवा" : "Specialist anorectal treatments"}
             </h1>
-            <p className="mt-2.5 text-xs sm:text-sm text-white/80 max-w-xl mx-auto leading-relaxed text-balance">
-              State-of-the-art procedures designed with gentle hands, 3D digital imaging, and 100% transparent pricing.
+
+            <p
+              className="mt-3 text-xs sm:text-sm text-[#3F5652] max-w-xl mx-auto leading-relaxed text-balance"
+              lang={isMarathi ? "mr" : "en"}
+            >
+              {isMarathi
+                ? "गंगाखेड येथे शास्त्रोक्त क्षारसूत्र चिकित्सा, मुळव्याध नियंत्रण, फिशर आणि बद्धकोष्ठतेवर सुरक्षित व खाजगी उपचार."
+                : "Authentic Ayurvedic surgical and conservative proctology care in Gangakhed, Dist. Parbhani."}
             </p>
+
+            <div className="mt-4 inline-block bg-[#EAF6F2] px-4 py-1.5 rounded-full text-xs text-[#064B40] border border-[#D5E6E0]">
+              <span>
+                {isMarathi
+                  ? "टीप: उपचारांची अचूक दिशा प्रत्यक्ष क्लिनिकल तपासणीनंतर ठरते."
+                  : "Notice: Individual treatment depends strictly on proper clinical examination by the doctor."}
+              </span>
+            </div>
           </div>
         </section>
 
-        {/* 2-Column Compact Grid on Mobile, 3-Column on Desktop */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-[1240px] mx-auto px-3.5 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+        {/* Treatments Grid with Inline Schematic SVG Diagrams (Zero Broken Images) */}
+        <section className="py-10 sm:py-14 bg-white">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {siteConfig.treatments.map((t) => (
-                <Link
+                <div
                   key={t.id}
-                  href={`/treatments/${t.slug}`}
-                  className="group flex flex-col rounded-2xl sm:rounded-3xl bg-white border border-gray-200/80 overflow-hidden shadow-xs hover:shadow-md transition-all card-press focus:outline-none focus-visible:ring-2 focus-visible:ring-[#26B5AC]"
+                  className="group flex flex-col rounded-2xl bg-[#F4FAF8] border border-[#D5E6E0] overflow-hidden shadow-2xs hover:shadow-xs transition-all"
                 >
-                  {/* Image 4:3 */}
-                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
-                    <Image
-                      src={t.image}
-                      alt={t.title}
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#0B3B4A]/90 text-white backdrop-blur-sm">
-                      {t.badge}
-                    </span>
+                  {/* Schematic Diagram Thumbnail */}
+                  <div className="p-3 bg-white border-b border-[#D5E6E0]/70">
+                    <ConditionDiagram type={t.id} compact />
                   </div>
 
-                  {/* Content: Compact info */}
-                  <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between">
+                  {/* Card Content */}
+                  <div className="p-5 flex-1 flex flex-col justify-between text-left">
                     <div>
-                      <h2 className="font-serif text-sm sm:text-lg font-bold text-[#0B3B4A] group-hover:text-[#26B5AC] transition-colors leading-snug line-clamp-2">
-                        {t.title}
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-[#EAF6F2] text-[#064B40] border border-[#D5E6E0] inline-block mb-2">
+                        {isMarathi ? t.badgeMr : t.badge}
+                      </span>
+
+                      <h2
+                        className="font-bold text-base sm:text-lg text-[#064B40] group-hover:text-[#0B7A68] transition-colors leading-snug"
+                        lang={isMarathi ? "mr" : "en"}
+                      >
+                        <Link href={`/treatments/${t.slug}`}>
+                          {isMarathi ? t.titleMr : t.title}
+                        </Link>
                       </h2>
-                      <p className="hidden sm:block text-xs text-[#5B7480] mt-1.5 line-clamp-2 leading-relaxed">
-                        {t.oneLineDesc || t.shortDesc}
+
+                      <p
+                        className="text-xs text-[#3F5652] mt-1.5 line-clamp-2 leading-relaxed"
+                        lang={isMarathi ? "mr" : "en"}
+                      >
+                        {isMarathi ? (t.oneLineDescMr || t.shortDescMr) : (t.oneLineDesc || t.shortDesc)}
                       </p>
+
+                      {/* Common Symptoms preview */}
+                      <div className="mt-3 pt-2.5 border-t border-[#D5E6E0]/60">
+                        <span className="text-[11px] font-bold text-[#064B40] block mb-1">
+                          {isMarathi ? "प्रमुख लक्षणे:" : "Common symptoms:"}
+                        </span>
+                        <ul className="text-xs text-[#3F5652] space-y-1">
+                          {(isMarathi ? (t.symptomsMr || t.symptoms) : t.symptoms).slice(0, 2).map((s, i) => (
+                            <li key={i} className="flex items-center gap-1.5 truncate">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#0B7A68] shrink-0" />
+                              <span className="truncate">{s}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
 
-                    <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 flex items-center justify-between gap-1">
-                      <span className="text-[11px] sm:text-xs font-bold text-[#0B3B4A] bg-[#E9F7F5] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md">
-                        From {t.startingPrice}
-                      </span>
-                      <span className="text-[10px] sm:text-xs font-semibold text-[#26B5AC] group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-0.5">
-                        <span className="hidden sm:inline">Details</span>
-                        <ArrowRightIcon className="w-3 h-3" />
-                      </span>
+                    <div className="mt-5 pt-3 border-t border-[#D5E6E0]/60 flex items-center justify-between gap-2">
+                      <Link
+                        href={`/treatments/${t.slug}`}
+                        className="text-xs font-bold text-[#0B7A68] hover:text-[#064B40] inline-flex items-center gap-1"
+                      >
+                        <span>{isMarathi ? "सविस्तर माहिती" : "Learn more"}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        href={`/book?treatment=${encodeURIComponent(t.title)}`}
+                      >
+                        {isMarathi ? "तपासणी" : "Consult now"}
+                      </Button>
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
+            </div>
+
+            {/* Disclaimer notice */}
+            <div className="mt-12 p-4 rounded-2xl bg-[#EAF6F2] border border-[#D5E6E0] text-xs text-[#3F5652] text-center max-w-2xl mx-auto leading-relaxed">
+              <p className="font-bold text-[#064B40] mb-0.5">
+                {isMarathi ? "वैद्यकीय पारदर्शकता सूचना" : "Clinical transparency notice"}
+              </p>
+              <p>
+                {isMarathi
+                  ? "येथील माहिती केवळ जनजागृतीसाठी आहे. कोणताही उपचार डॉक्टरांच्या प्रत्यक्ष तपासणी व सल्ल्यानंतरच निश्चित केला जातो."
+                  : "All procedures are recommended only after in-person clinical assessment by Dr. Anant Kore or Dr. Kiran Kore."}
+              </p>
             </div>
           </div>
         </section>

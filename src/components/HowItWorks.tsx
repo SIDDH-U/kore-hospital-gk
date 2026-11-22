@@ -1,107 +1,100 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import { siteConfig } from "@/config/site.config";
+import React from "react";
+import { useLanguage } from "@/context/LanguageContext";
+import { MessageSquare, Stethoscope, CheckCircle2 } from "lucide-react";
 
 export function HowItWorks() {
-  const content = siteConfig.howItWorks;
-  const steps = content.steps;
+  const { isMarathi } = useLanguage();
 
-  const sectionRef = useRef<HTMLElement>(null);
-  const [lineWidth, setLineWidth] = useState("0%");
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-      setLineWidth("100%");
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          // Animate line drawing
-          setTimeout(() => {
-            setLineWidth("100%");
-          }, 200);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const steps = [
+    {
+      step: "01",
+      icon: <MessageSquare className="w-5 h-5 text-[#F5A524]" strokeWidth={2} />,
+      titleEn: "Consultation",
+      titleMr: "सल्लामसलत",
+      descEn: "Private discussion of symptoms and clinical history in complete comfort.",
+      descMr: "शांत व खाजगी वातावरणात लक्षणांची सविस्तर माहिती व प्राथमिक चर्चा.",
+    },
+    {
+      step: "02",
+      icon: <Stethoscope className="w-5 h-5 text-[#F5A524]" strokeWidth={2} />,
+      titleEn: "Examination & diagnosis",
+      titleMr: "तपासणी व निदान",
+      descEn: "Gentle physical evaluation to determine condition grade and staging.",
+      descMr: "तज्ज्ञ डॉक्टरांकडून सौम्य तपासणी व अचूक स्थितीचे निदान.",
+    },
+    {
+      step: "03",
+      icon: <CheckCircle2 className="w-5 h-5 text-[#F5A524]" strokeWidth={2} />,
+      titleEn: "Treatment & follow-up",
+      titleMr: "उपचार व पाठपुरावा",
+      descEn: "Personalized Ksharsutra or Ayurvedic care with scheduled follow-ups.",
+      descMr: "क्षारसूत्र किंवा वैयक्तिक औषधोपचार व नियमित पाठपुरावा सल्ला.",
+    },
+  ];
 
   return (
     <section
-      ref={sectionRef}
-      id="how-it-works"
-      aria-labelledby="how-it-works-heading"
-      className="py-12 sm:py-16 lg:py-20 bg-[#E9F7F5] border-y border-[#26B5AC]/15"
+      id="how-a-visit-works"
+      aria-labelledby="how-visit-works-heading"
+      className="py-10 sm:py-14 lg:py-16 bg-[#064B40] text-white border-b border-[#0A4A40]"
     >
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#0B3B4A] border border-[#26B5AC]/30 mb-2.5 shadow-xs">
-            {content.badge}
+        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
+          <span className="text-xs font-semibold text-[#F5A524] block mb-1">
+            {isMarathi ? "उपचार टप्पे" : "Simple pathway"}
           </span>
           <h2
-            id="how-it-works-heading"
-            className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0B3B4A] tracking-tight text-balance"
+            id="how-visit-works-heading"
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight leading-snug"
+            lang={isMarathi ? "mr" : "en"}
           >
-            {content.titleStart}
-            <span className="font-serif italic text-[#26B5AC]">{content.titleHighlight}</span>
-            {content.titleEnd || " in four steps"}
+            {isMarathi ? "उपचार पद्धती कशी चालते?" : "How a visit works"}
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-[#5B7480] max-w-lg mx-auto text-balance">
-            {content.subtitle}
+          <p
+            className="mt-2 text-xs sm:text-sm text-[#CFE5DF] leading-relaxed"
+            lang={isMarathi ? "mr" : "en"}
+          >
+            {isMarathi
+              ? "पहिल्या भेटीपासून पूर्ण बरे होईपर्यंत ३ सोपे व पारदर्शक टप्पे."
+              : "A simple, transparent 3-step path to diagnosis, treatment, and long-term relief."}
           </p>
         </div>
 
-        {/* ========================================================
-            COMPACT 4-STEP STEPPER
-            Desktop: Connected numbered circles with animated progress line
-            Mobile: Horizontal snap-scroll with step title and ONE line each
-           ======================================================== */}
-        <div className="relative">
-          {/* Animated Connecting Line on Desktop (Tablet+) */}
-          <div
-            className="hidden lg:block absolute top-6 left-12 right-12 h-0.5 bg-gray-200 z-0"
-            aria-hidden="true"
-          >
+        {/* 3-Step Strip */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          {steps.map((item) => (
             <div
-              className="h-full bg-[#26B5AC] transition-all duration-1000 ease-out"
-              style={{ width: lineWidth }}
-            />
-          </div>
-
-          {/* Steps Track: Grid on Desktop, Horizontal Snap on Mobile */}
-          <div className="snap-carousel flex lg:grid lg:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth pb-3 -mx-4 px-4 sm:mx-0 sm:px-0">
-            {steps.map((st) => (
-              <div
-                key={st.step}
-                className="snap-card group flex flex-col w-[220px] sm:w-[260px] lg:w-auto shrink-0 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/80 shadow-xs relative z-10 transition-all hover:shadow-md"
-              >
-                {/* Numbered Step Circle */}
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#0B3B4A] text-white font-serif font-bold text-base sm:text-lg flex items-center justify-center shrink-0 mb-3.5 shadow-xs border-2 border-white group-hover:bg-[#26B5AC] transition-colors">
-                  0{st.step}
+              key={item.step}
+              className="p-5 sm:p-6 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15 shadow-sm flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center">
+                    {item.icon}
+                  </div>
+                  <span className="text-xs font-bold text-[#F5A524] bg-white/10 px-2.5 py-1 rounded-full border border-white/15">
+                    Step {item.step}
+                  </span>
                 </div>
 
-                <h3 className="font-serif text-sm sm:text-base font-bold text-[#0B3B4A] mb-1">
-                  {st.title}
+                <h3
+                  className="font-bold text-base sm:text-lg text-white mb-2"
+                  lang={isMarathi ? "mr" : "en"}
+                >
+                  {isMarathi ? item.titleMr : item.titleEn}
                 </h3>
-                {/* ONE Line Short Description */}
-                <p className="text-xs text-[#5B7480] leading-relaxed line-clamp-2">
-                  {st.description}
+                <p
+                  className="text-xs sm:text-sm text-[#CFE5DF] leading-relaxed"
+                  lang={isMarathi ? "mr" : "en"}
+                >
+                  {isMarathi ? item.descMr : item.descEn}
                 </p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -161,7 +161,7 @@ async function BlogContent({ params }: PageProps) {
             ))}
 
             <p>
-              At {siteConfig.brand.name}, our specialist clinical team is dedicated to preventive oral wellness and educating our patients. If you or your family members experience dental symptoms, early clinical consultation ensures the best long-term outcome.
+              At {siteConfig.brand.name}, our specialist doctors are dedicated to compassionate anorectal care and patient awareness. If you experience bleeding, anal pain, swelling, or persistent digestive discomfort, early clinical examination ensures accurate diagnosis and timely relief.
             </p>
           </div>
 
@@ -183,7 +183,7 @@ async function BlogContent({ params }: PageProps) {
               className="min-h-[44px] px-6 py-2.5 rounded-full bg-[#0F3D3E] text-white text-xs font-bold btn-press btn-teal flex items-center gap-1.5 shadow"
             >
               <CalendarIcon className="w-3.5 h-3.5 text-[#CDEBD8]" />
-              <span>Book Consultation</span>
+              <span>Book appointment</span>
             </Link>
           </div>
         </article>

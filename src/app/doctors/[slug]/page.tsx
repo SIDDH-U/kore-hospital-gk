@@ -1,7 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { siteConfig, getSiteUrl, buildWhatsAppLink } from "@/config/site.config";
 import { TopStrip } from "@/components/TopStrip";
@@ -9,7 +8,14 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { CalendarIcon, WhatsAppIcon, ClockIcon, CheckCircleIcon } from "@/components/Icons";
+import {
+  CalendarIcon,
+  WhatsAppIcon,
+  PhoneIcon,
+  DoctorMaleAvatar,
+  DoctorFemaleAvatar,
+  ShieldCheckIcon,
+} from "@/components/Icons";
 
 interface DoctorPageProps {
   params: Promise<{ slug: string }>;
@@ -31,14 +37,13 @@ export async function generateMetadata({ params }: DoctorPageProps): Promise<Met
 
   return {
     title: `${doctor.name} - ${doctor.role} | ${siteConfig.brand.name}`,
-    description: `${doctor.name} (${doctor.degrees}) is an experienced ${doctor.speciality} with ${doctor.experience} experience at ${siteConfig.brand.name}.`,
+    description: `${doctor.name} (${doctor.qualification}) - Specialist in ${doctor.specialty} at ${siteConfig.brand.name}, Gangakhed.`,
     alternates: {
       canonical: `${getSiteUrl()}/doctors/${doctor.slug}`,
     },
     openGraph: {
       title: `${doctor.name} | ${siteConfig.brand.name}`,
-      description: doctor.shortBio,
-      images: [{ url: `${getSiteUrl()}${doctor.image}` }],
+      description: `${doctor.name} (${doctor.qualification}) - ${doctor.specialty}`,
     },
   };
 }
@@ -51,22 +56,24 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
     notFound();
   }
 
+  const isFemale = doctor.avatar === "female";
+
   const doctorJsonLd = {
     "@context": "https://schema.org",
     "@type": "Physician",
     name: doctor.name,
     jobTitle: doctor.role,
-    medicalSpecialty: doctor.speciality,
+    medicalSpecialty: doctor.specialty,
     worksFor: {
-      "@type": "Dentist",
+      "@type": "MedicalClinic",
       name: siteConfig.brand.name,
+      address: siteConfig.brand.fullAddress,
     },
-    image: `${getSiteUrl()}${doctor.image}`,
-    description: doctor.shortBio,
+    telephone: doctor.phoneRaw,
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFCFC]">
+    <div className="min-h-screen flex flex-col bg-[#EAF6F2]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(doctorJsonLd) }}
@@ -76,8 +83,7 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
       <Header />
 
       <main className="flex-1 pb-16 lg:pb-0">
-        {/* Profile Hero */}
-        <section className="bg-[#0B3B4A] text-white py-12 sm:py-16">
+        <section className="bg-[#064B40] text-white py-12 sm:py-16">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
             <nav aria-label="Breadcrumb" className="mb-6">
               <ol className="flex items-center gap-2 text-xs text-white/70">
@@ -93,63 +99,64 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
                   </Link>
                 </li>
                 <li>/</li>
-                <li className="text-[#26B5AC] font-semibold">{doctor.name}</li>
+                <li className="text-[#F5A524] font-semibold">{doctor.name}</li>
               </ol>
             </nav>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-              {/* Doctor Photo */}
-              <div className="md:col-span-4 lg:col-span-3">
-                <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
-                  <Image
-                    src={doctor.image}
-                    alt={doctor.name}
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, 30vw"
-                    className="object-cover object-top"
-                  />
+              {/* Doctor Avatar - Clean SVG */}
+              <div className="md:col-span-4 flex justify-center">
+                <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden bg-[#EAF6F2] p-3 border-4 border-white/20 shadow-xl">
+                  {isFemale ? (
+                    <DoctorFemaleAvatar className="w-full h-full" />
+                  ) : (
+                    <DoctorMaleAvatar className="w-full h-full" />
+                  )}
                 </div>
               </div>
 
-              {/* Doctor Summary */}
-              <div className="md:col-span-8 lg:col-span-9 space-y-3">
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#26B5AC] border border-white/15">
-                  {doctor.speciality}
+              {/* Doctor Details */}
+              <div className="md:col-span-8 text-center md:text-left">
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-[#F5A524] border border-white/15 mb-3">
+                  Specialist consultant
                 </span>
                 <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
                   {doctor.name}
                 </h1>
-                <p className="text-base sm:text-lg text-[#F2A65A] font-semibold">
-                  {doctor.role}
+                <p className="text-base sm:text-lg text-white/90 font-semibold mt-2">
+                  {doctor.qualification}
                 </p>
-                <p className="text-xs sm:text-sm text-white/70">
-                  {doctor.degrees} · {doctor.experience} Experience
+                <p className="text-sm text-[#F5A524] font-medium mt-1">
+                  Specialty: {doctor.specialty}
                 </p>
 
-                <div className="pt-2 text-xs text-[#E9F7F5] bg-white/10 p-3 rounded-xl inline-block border border-white/15">
-                  ✨ {doctor.highlight}
-                </div>
+                <div className="mt-8 flex flex-wrap items-center justify-center md:justify-start gap-4">
+                  <a
+                    href={`tel:${doctor.phoneRaw || siteConfig.contact.phoneRaw}`}
+                    className="min-h-[48px] px-5 rounded-[12px] border-2 border-white hover:bg-white/10 text-white font-semibold text-sm inline-flex items-center gap-2 transition-all active:scale-[0.98]"
+                  >
+                    <PhoneIcon className="w-4 h-4 text-white" />
+                    <span>Call {doctor.phone}</span>
+                  </a>
 
-                <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <Link
                     href={`/book?doctor=${encodeURIComponent(doctor.name)}`}
-                    className="btn-idle-shine btn-press h-12 px-7 rounded-full bg-[#F2A65A] hover:bg-[#E09244] text-[#07252F] font-bold text-sm flex items-center justify-center gap-2 shadow-lg"
+                    className="min-h-[48px] px-6 rounded-[12px] bg-[#F5A524] hover:bg-[#E09419] text-[#0F2321] font-semibold text-sm inline-flex items-center gap-2 shadow-xs transition-all active:scale-[0.98]"
                   >
-                    <CalendarIcon className="w-4 h-4 text-[#07252F]" />
-                    <span>Book Appointment with {doctor.name}</span>
+                    <CalendarIcon className="w-4 h-4 text-[#0F2321]" />
+                    <span>Book appointment</span>
                   </Link>
 
                   <a
                     href={buildWhatsAppLink(
-                      `Hello ${siteConfig.brand.name}, I would like to book a visit with ${doctor.name}.`
+                      `Hello ${siteConfig.brand.name}, I would like to book a consultation with ${doctor.name}.`
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-press h-12 px-6 rounded-full bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-sm flex items-center justify-center gap-2"
+                    className="min-h-[48px] px-5 rounded-[12px] bg-[#1B8755] hover:bg-[#167046] text-white font-semibold text-sm inline-flex items-center gap-2 shadow-xs transition-all active:scale-[0.98]"
                   >
-                    <WhatsAppIcon className="w-4 h-4 text-[#26B5AC]" />
-                    <span>Chat on WhatsApp</span>
+                    <WhatsAppIcon className="w-4 h-4 text-white" />
+                    <span>WhatsApp</span>
                   </a>
                 </div>
               </div>
@@ -157,43 +164,21 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
           </div>
         </section>
 
-        {/* Detailed Info */}
-        <section className="py-14 sm:py-20">
-          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-              {/* Bio & Approach (8 cols) */}
-              <div className="lg:col-span-8 space-y-6">
-                <div className="p-8 rounded-3xl bg-white border border-gray-200/80 shadow-sm">
-                  <h2 className="font-display text-2xl font-bold text-[#0B3B4A] mb-4">
-                    About {doctor.name}
-                  </h2>
-                  <p className="text-sm sm:text-base text-[#5B7480] leading-relaxed">
-                    {doctor.shortBio}
-                  </p>
-                  <p className="text-sm sm:text-base text-[#5B7480] leading-relaxed mt-4">
-                    At {siteConfig.brand.name}, {doctor.name} focuses on patient-first, painless dentistry using state-of-the-art 3D digital imaging, computerized anesthesia, and minimally invasive techniques to ensure your comfort is the priority at every appointment.
-                  </p>
-                </div>
-              </div>
-
-              {/* Consultation Timings (4 cols) */}
-              <div className="lg:col-span-4 p-6 sm:p-8 rounded-3xl bg-[#E9F7F5] border border-[#26B5AC]/20 shadow-sm space-y-4">
-                <h3 className="font-display text-lg font-bold text-[#0B3B4A]">
-                  Consultation Timings
-                </h3>
-                <div className="flex items-start gap-3 text-xs sm:text-sm text-[#0B3B4A]">
-                  <ClockIcon className="w-4 h-4 text-[#26B5AC] shrink-0 mt-0.5" />
-                  <span>{doctor.timings}</span>
-                </div>
-                <div className="pt-4 border-t border-[#26B5AC]/20">
-                  <Link
-                    href={`/book?doctor=${encodeURIComponent(doctor.name)}`}
-                    className="btn-press w-full py-3 rounded-full bg-[#0B3B4A] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm text-center"
-                  >
-                    <CalendarIcon className="w-3.5 h-3.5 text-[#F2A65A]" />
-                    <span>Reserve Time Slot</span>
-                  </Link>
-                </div>
+        {/* Clinical Overview */}
+        <section className="py-12 sm:py-16">
+          <div className="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#D5E6E0] shadow-xs space-y-4">
+              <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#064B40]">
+                About {doctor.name}
+              </h2>
+              <p className="text-sm text-[#3F5652] leading-relaxed">
+                {doctor.name} is a specialist in {doctor.specialty} practicing at {siteConfig.brand.name} in Gangakhed, Dist. Parbhani.
+              </p>
+              <div className="p-4 rounded-2xl bg-[#EAF6F2] border border-[#D5E6E0] flex items-center gap-3">
+                <ShieldCheckIcon className="w-5 h-5 text-[#0B7A68] shrink-0" />
+                <p className="text-xs text-[#064B40]">
+                  <strong>Consultation Venue:</strong> {siteConfig.brand.fullAddress}
+                </p>
               </div>
             </div>
           </div>

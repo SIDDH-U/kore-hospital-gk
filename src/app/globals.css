@@ -2,68 +2,77 @@
 
 @layer theme {
   :root {
-    --color-primary: #0B3B4A;
-    --color-primary-dark: #07252F;
-    --color-primary-light: #165366;
-    --color-accent: #26B5AC;
-    --color-accent-dark: #1E948C;
-    --color-accent-light: #4DD0C7;
-    --color-cta: #F2A65A;
-    --color-cta-hover: #E09244;
-    --color-cta-active: #C87B2E;
-    --color-mint: #E9F7F5;
-    --color-mint-dark: #D4EFEA;
-    --color-mint-light: #F4FAF9;
-    --color-warm-white: #FAFCFC;
-    --color-charcoal: #12303A;
-    --color-charcoal-muted: #5B7480;
+    --color-primary: #0B7A68;
+    --color-primary-dark: #064B40;
+    --color-deep: #052F29;
+    --color-mint: #EAF6F2;
+    --color-white: #FFFFFF;
+    --color-amber: #F5A524;
+    --color-ink: #0F2321;
+    --color-muted: #3F5652;
+    --color-border: #D5E6E0;
+    --color-dark-muted: #CFE5DF;
   }
 }
 
 @theme {
-  --color-primary: #0B3B4A;
-  --color-primary-dark: #07252F;
-  --color-primary-light: #165366;
-  --color-accent: #26B5AC;
-  --color-accent-dark: #1E948C;
-  --color-accent-light: #4DD0C7;
-  --color-cta: #F2A65A;
-  --color-cta-hover: #E09244;
-  --color-cta-active: #C87B2E;
-  --color-mint: #E9F7F5;
-  --color-mint-dark: #D4EFEA;
-  --color-mint-light: #F4FAF9;
-  --color-warm-white: #FAFCFC;
-  --color-charcoal: #12303A;
-  --color-charcoal-muted: #5B7480;
+  --color-primary: #0B7A68;
+  --color-primary-dark: #064B40;
+  --color-deep: #052F29;
+  --color-mint: #EAF6F2;
+  --color-white: #FFFFFF;
+  --color-amber: #F5A524;
+  --color-ink: #0F2321;
+  --color-muted: #3F5652;
+  --color-border: #D5E6E0;
+  --color-dark-muted: #CFE5DF;
 
-  --font-serif: var(--font-serif), "Playfair Display", Georgia, serif;
-  --font-sans: var(--font-sans), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
+  --font-sans: var(--font-sans), var(--font-devanagari), "Noto Sans Devanagari", "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
 /* Base resets & typography */
 html {
   scroll-behavior: smooth;
   font-family: var(--font-sans);
-  color: #12303A;
-  background-color: #FAFCFC;
+  color: #0F2321;
+  background-color: #FFFFFF;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  overflow-x: hidden;
 }
 
 body {
   font-family: var(--font-sans);
-  color: #12303A;
-  background-color: #FAFCFC;
+  color: #0F2321;
+  background-color: #FFFFFF;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Serif font helper for headings */
-.font-display {
-  font-family: var(--font-serif);
+/* Safe typography */
+h1, h2, h3, h4, .text-balance {
+  text-wrap: balance;
+}
+
+/* Devanagari Typography Rules: zero letter-spacing, generous line-height to avoid squashing conjuncts */
+:lang(mr), [lang="mr"], html[lang="mr"] {
+  letter-spacing: 0 !important;
+  line-height: 1.45 !important;
+}
+
+:lang(mr) h1, [lang="mr"] h1,
+:lang(mr) h2, [lang="mr"] h2,
+:lang(mr) h3, [lang="mr"] h3,
+:lang(mr) h4, [lang="mr"] h4,
+html[lang="mr"] h1, html[lang="mr"] h2, html[lang="mr"] h3, html[lang="mr"] h4 {
+  letter-spacing: 0 !important;
+  line-height: 1.35 !important;
 }
 
 /* Form inputs font-size to prevent iOS zoom */
@@ -73,401 +82,84 @@ input, select, textarea {
   touch-action: manipulation;
 }
 
-/* Headings text balance */
-h1, h2, h3, h4, .text-balance {
-  text-wrap: balance;
-}
-
-/* Fluid hero h1 */
-.hero-h1 {
-  font-size: clamp(2.15rem, 6.2vw, 3.75rem);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-  font-family: var(--font-serif);
-  text-wrap: balance;
-}
-
-/* Focus visible styles in fresh aqua */
+/* Accessible focus visible ring */
 :focus-visible {
-  outline: 2px solid #26B5AC !important;
+  outline: 2px solid #0B7A68 !important;
   outline-offset: 2px !important;
 }
 
-/* ========================================================
-   BUTTON & INTERACTION FEEDBACK
-   ======================================================== */
-.btn-press {
-  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
+/* Treatment Icon Soft Hue Tints */
+.tint-mint {
+  background-color: #EAF6F2;
+  color: #0B7A68;
+}
+.tint-amber {
+  background-color: #FDF0D5;
+  color: #B87108;
+}
+.tint-sky {
+  background-color: #E3F0FA;
+  color: #1D70B8;
+}
+.tint-rose {
+  background-color: #FBE7E4;
+  color: #C93B2B;
 }
 
-.btn-press:active {
-  transform: scale(0.97);
-  transition-duration: 100ms;
-}
-
-.btn-cta {
-  background-color: #F2A65A;
-  color: #07252F;
-}
-
-.btn-cta:hover {
-  background-color: #E09244;
-}
-
-.btn-cta:active {
-  background-color: #C87B2E !important;
-}
-
-.btn-primary {
-  background-color: #0B3B4A;
-  color: #FFFFFF;
-}
-
-.btn-primary:hover {
-  background-color: #165366;
-}
-
-.btn-primary:active {
-  background-color: #07252F !important;
-}
-
-/* Card Press Feedback */
-.card-press {
-  transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 220ms cubic-bezier(0.4, 0, 0.2, 1), border-color 220ms ease;
-}
-
-.card-press:active {
-  transform: scale(0.98);
-  transition-duration: 100ms;
-}
-
-/* Desktop Hover Elevation */
-@media (hover: hover) and (pointer: fine) {
-  .card-hover-shadow {
-    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms ease;
-  }
-  .card-hover-shadow:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 32px -4px rgba(11, 59, 74, 0.08), 0 4px 12px -2px rgba(11, 59, 74, 0.04);
-    border-color: #26B5AC40;
-  }
-  .card-hover-shadow:hover .hover-img-zoom {
-    transform: scale(1.05);
-  }
-  .card-hover-shadow:hover .card-arrow-icon {
-    transform: translateX(4px);
-  }
-}
-
-.hover-img-zoom {
-  transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card-arrow-icon {
-  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ========================================================
-   IDLE BUTTON SHINE (Clean, no stuck mid-sweep)
-   ======================================================== */
-@keyframes idleShineSweep {
+/* Single orchestrated hero entrance animation (<700ms, plays once) */
+@keyframes heroEntrance {
   0% {
     opacity: 0;
-    transform: translateX(-160%) skewX(-25deg);
-  }
-  4% {
-    opacity: 0.9;
-  }
-  24% {
-    opacity: 0.9;
-    transform: translateX(260%) skewX(-25deg);
-  }
-  26%, 100% {
-    opacity: 0;
-    transform: translateX(260%) skewX(-25deg);
-  }
-}
-
-.btn-idle-shine {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-idle-shine::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 28px;
-  height: 100%;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
-  opacity: 0;
-  transform: translateX(-160%) skewX(-25deg);
-  pointer-events: none;
-  animation: idleShineSweep 5.5s ease-in-out infinite;
-  animation-delay: var(--shine-delay, 0s);
-  will-change: transform, opacity;
-}
-
-/* Pause animations when user prefers reduced motion or hidden */
-.anim-idle-disabled::after,
-.hero-paused * {
-  animation: none !important;
-}
-
-/* Ripple effect container */
-.btn-ripple-container {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-ripple-circle {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  animation: rippleGrow 500ms cubic-bezier(0, 0, 0.2, 1) forwards;
-}
-
-@keyframes rippleGrow {
-  to {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0;
-  }
-}
-
-/* Phone icon wiggle */
-@keyframes phoneRingWiggle {
-  0%, 88% {
-    transform: rotate(0deg);
-  }
-  90% {
-    transform: rotate(-10deg);
-  }
-  92% {
-    transform: rotate(10deg);
-  }
-  94% {
-    transform: rotate(-10deg);
-  }
-  96% {
-    transform: rotate(10deg);
-  }
-  98% {
-    transform: rotate(-4deg);
+    transform: translateY(14px);
   }
   100% {
-    transform: rotate(0deg);
-  }
-}
-
-.phone-ring-icon {
-  display: inline-block;
-  animation: phoneRingWiggle 7s ease-in-out infinite;
-  transform-origin: center center;
-}
-
-/* ========================================================
-   HERO REVEAL SEQUENCE & PHOTO MASKS
-   ======================================================== */
-@keyframes heroFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.hero-seq-1 { animation: heroFadeUp 550ms cubic-bezier(0.16, 1, 0.3, 1) 0ms forwards; opacity: 0; }
-.hero-seq-2 { animation: heroFadeUp 550ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards; opacity: 0; }
-.hero-seq-3 { animation: heroFadeUp 550ms cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards; opacity: 0; }
-.hero-seq-4 { animation: heroFadeUp 550ms cubic-bezier(0.16, 1, 0.3, 1) 240ms forwards; opacity: 0; }
-.hero-seq-5 { animation: heroFadeUp 550ms cubic-bezier(0.16, 1, 0.3, 1) 320ms forwards; opacity: 0; }
+.hero-animate-1 {
+  animation: heroEntrance 450ms cubic-bezier(0.16, 1, 0.3, 1) 40ms both;
+}
+.hero-animate-2 {
+  animation: heroEntrance 450ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+}
+.hero-animate-3 {
+  animation: heroEntrance 450ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
+}
+.hero-animate-4 {
+  animation: heroEntrance 450ms cubic-bezier(0.16, 1, 0.3, 1) 280ms both;
+}
+.hero-animate-photo {
+  animation: heroEntrance 500ms cubic-bezier(0.16, 1, 0.3, 1) 160ms both;
+}
 
-/* Gentle headline shimmer */
-@keyframes smileShimmer {
-  0%, 80% {
-    background-position: -200% center;
+/* Press & hover feedback ONLY on devices that support hover */
+@media (hover: hover) and (pointer: fine) {
+  .tile-hover {
+    transition: transform 160ms ease, box-shadow 160ms ease;
   }
-  90%, 100% {
-    background-position: 200% center;
-  }
-}
-
-.smile-shimmer {
-  background: linear-gradient(105deg, #26B5AC 0%, #26B5AC 30%, #FFFFFF 50%, #26B5AC 70%, #26B5AC 100%);
-  background-size: 250% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: smileShimmer 8s ease-in-out infinite;
-}
-
-/* Gradient photo mask blending into #0B3B4A */
-.hero-photo-mask {
-  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,0.5) 18%, #000000 38%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,0.5) 18%, #000000 38%);
-}
-
-@media (min-width: 1024px) {
-  .hero-photo-mask {
-    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.12) 6%, rgba(0,0,0,0.45) 16%, rgba(0,0,0,0.85) 30%, #000000 45%);
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.12) 6%, rgba(0,0,0,0.45) 16%, rgba(0,0,0,0.85) 30%, #000000 45%);
+  .tile-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px -2px rgba(11, 122, 104, 0.08);
   }
 }
 
-/* Floating WhatsApp desktop button pulse */
-@keyframes whatsappPulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(38, 181, 172, 0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 16px rgba(38, 181, 172, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(38, 181, 172, 0);
-  }
-}
-
-.whatsapp-pulse {
-  animation: whatsappPulse 3s infinite;
-}
-
-/* ========================================================
-   DOCTORS AUTO-SCROLLING MARQUEE
-   ======================================================== */
-@keyframes doctorsMarqueeScroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.doctors-marquee-track {
-  display: flex;
-  width: max-content;
-  animation: doctorsMarqueeScroll var(--doctors-scroll-duration, 35s) linear infinite;
-  will-change: transform;
-}
-
-.doctors-marquee-container:hover .doctors-marquee-track {
-  animation-play-state: paused;
-}
-
-/* Patient reviews marquee */
-.reviews-marquee-track {
-  display: flex;
-  width: max-content;
-  animation: doctorsMarqueeScroll var(--reviews-scroll-duration, 40s) linear infinite;
-  will-change: transform;
-}
-
-.reviews-marquee-container:hover .reviews-marquee-track {
-  animation-play-state: paused;
-}
-
-/* ========================================================
-   SCROLL REVEAL UTILITIES
-   ======================================================== */
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-on-scroll.is-revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ========================================================
-   BEFORE/AFTER COMPARISON SLIDER STYLES
-   ======================================================== */
-.ba-slider-container {
-  position: relative;
-  overflow: hidden;
-  user-select: none;
-  touch-action: pan-y;
-}
-
-.ba-slider-handle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: #FFFFFF;
-  cursor: ew-resize;
-  z-index: 20;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.ba-slider-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #FFFFFF;
-  color: #0B3B4A;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Smooth Accordion */
-details summary::-webkit-details-marker {
-  display: none;
-}
-
-details[open] summary .faq-chevron {
-  transform: rotate(180deg);
-}
-
-/* Treatment Card Highlight Pulse */
-@keyframes treatmentPulseGlow {
-  0% {
-    box-shadow: 0 0 0 0 rgba(38, 181, 172, 0.7);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(38, 181, 172, 0);
-    transform: scale(1.025);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(38, 181, 172, 0);
-    transform: scale(1);
-  }
-}
-
-.treatment-pulse {
-  animation: treatmentPulseGlow 1.4s ease-out 1 !important;
-  border-color: #26B5AC !important;
-}
-
-/* Horizontal Scroll Snap utilities */
-.snap-carousel {
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-}
-
-.snap-card {
-  scroll-snap-align: center;
-}
-
-/* Reduced motion respect */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-animate-1,
+  .hero-animate-2,
+  .hero-animate-3,
+  .hero-animate-4,
+  .hero-animate-photo {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

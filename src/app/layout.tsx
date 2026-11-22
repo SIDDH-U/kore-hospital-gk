@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
+import { Plus_Jakarta_Sans, Noto_Sans_Devanagari, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { siteConfig, clinicConfig, getSiteUrl } from "@/config/site.config";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -10,8 +11,16 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+const notoDevanagari = Noto_Sans_Devanagari({
+  subsets: ["devanagari", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-devanagari",
+  display: "swap",
+});
+
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
+  weight: ["600", "700"],
   variable: "--font-serif",
   display: "swap",
 });
@@ -20,7 +29,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: siteConfig.theme.primaryDark,
+  themeColor: "#052F29",
 };
 
 const siteUrl = getSiteUrl();
@@ -28,53 +37,68 @@ const siteUrl = getSiteUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${clinicConfig.name} | Dental Clinic in ${clinicConfig.city}`,
+    default: `${clinicConfig.name} | Piles & Ksharsutra Care in ${clinicConfig.city}`,
     template: `%s | ${clinicConfig.name}`,
   },
   description: siteConfig.brand.fullDescription,
   keywords: [
     clinicConfig.name,
     clinicConfig.shortName,
-    `Dentist in ${clinicConfig.city}`,
-    `Dental Clinic ${clinicConfig.city}`,
-    `Dental Implants ${clinicConfig.city}`,
-    `Clear Aligners ${clinicConfig.city}`,
-    `Painless Root Canal ${clinicConfig.city}`,
-    `Teeth Whitening ${clinicConfig.city}`,
-    `Best Dentist ${clinicConfig.city}`,
-    "Cosmetic Dentistry",
+    "Kore Hospital Gangakhed",
+    "Piles hospital Gangakhed",
+    "Mūlvyādh Centre Gangakhed",
+    "Fissure treatment Parbhani",
+    "Fistula Ksharsutra Gangakhed",
+    "Dr Anant Kore",
+    "Dr Kiran Kore",
+    "Piles specialist Gangakhed",
+    "Ano-rectal clinic Gangakhed",
   ],
-  authors: [{ name: clinicConfig.name }],
+  authors: [
+    { name: "Dr. Anant Kamaji Kore" },
+    { name: "Dr. Kiran Anant Kore" },
+  ],
   creator: clinicConfig.name,
   publisher: clinicConfig.name,
+  formatDetection: {
+    telephone: true,
+    address: true,
+  },
   alternates: {
-    canonical: "/",
+    canonical: siteUrl,
   },
   openGraph: {
-    title: `${clinicConfig.name} | ${clinicConfig.tagline}`,
+    type: "website",
+    locale: "en_IN",
+    url: siteUrl,
+    title: `${clinicConfig.name} | Piles & Ksharsutra Centre Gangakhed`,
     description: siteConfig.brand.description,
-    url: "/",
     siteName: clinicConfig.name,
     images: [
       {
-        url: "/images/hero-desktop.webp",
-        width: 1600,
-        height: 900,
-        alt: `${clinicConfig.name} - Modern Dental Studio`,
+        url: `${siteUrl}/images/clinic-exterior.jpg`,
+        width: 1200,
+        height: 630,
+        alt: `${clinicConfig.name} - Gangakhed`,
       },
     ],
-    locale: "en_IN",
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${clinicConfig.name} | ${clinicConfig.tagline}`,
+    title: `${clinicConfig.name} | Piles & Ksharsutra Centre Gangakhed`,
     description: siteConfig.brand.description,
-    images: ["/images/hero-desktop.webp"],
+    images: [`${siteUrl}/images/clinic-exterior.jpg`],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -83,33 +107,37 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const t = siteConfig.theme;
-
-  const dentistSchema = {
+  const hospitalStructuredData = {
     "@context": "https://schema.org",
-    "@type": "Dentist",
+    "@type": "MedicalClinic",
+    "@id": `${siteUrl}/#hospital`,
     name: clinicConfig.name,
-    legalName: clinicConfig.legalName || clinicConfig.name,
-    description: siteConfig.brand.description,
+    alternateName: clinicConfig.nameMr,
     url: siteUrl,
-    telephone: clinicConfig.phoneRaw,
-    email: clinicConfig.email || "",
-    image: `${siteUrl}/images/hero-desktop.webp`,
-    priceRange: "$$",
+    logo: `${siteUrl}/images/clinic-exterior.jpg`,
+    image: `${siteUrl}/images/clinic-exterior.jpg`,
+    description: siteConfig.brand.fullDescription,
+    telephone: siteConfig.contact.phoneRaw,
+    email: siteConfig.contact.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: clinicConfig.address,
-      addressLocality: clinicConfig.city,
-      addressRegion: clinicConfig.state,
-      postalCode: clinicConfig.pincode,
+      streetAddress: siteConfig.brand.address,
+      addressLocality: siteConfig.brand.city,
+      addressRegion: siteConfig.brand.state,
+      postalCode: siteConfig.brand.pincode,
       addressCountry: "IN",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: "18.9698392",
+      longitude: "76.7479928",
     },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         opens: "09:00",
-        closes: "20:30",
+        closes: "20:00",
       },
       {
         "@type": "OpeningHoursSpecification",
@@ -119,56 +147,46 @@ export default function RootLayout({
       },
     ],
     medicalSpecialty: [
-      "Dentistry",
-      "Orthodontics",
-      "Periodontics",
-      "Endodontics",
-      "PediatricDentistry",
+      "Ano-rectal Care",
+      "Ksharsutra Therapy",
+      "Ayurvedic Surgery",
+      "Proctology",
+      "General Medicine",
+      "Gynecology",
     ],
-    ...(clinicConfig.sections.showDoctors && clinicConfig.leadDoctor
-      ? {
-          founder: {
-            "@type": "Person",
-            name: clinicConfig.leadDoctor.name,
-            jobTitle: clinicConfig.leadDoctor.role || "Lead Specialist",
-          },
-        }
-      : {}),
+    physician: clinicConfig.doctors.map((doc) => ({
+      "@type": "Physician",
+      name: doc.name,
+      medicalSpecialty: doc.specialty,
+      knowsAbout: [
+        "Piles Treatment",
+        "Anal Fissure",
+        "Anal Fistula",
+        "Ksharsutra",
+        "Anorectal Care",
+      ],
+    })),
   };
 
-  // Injected CSS variables dynamically apply active theme preset
-  const themeCssVariables = `
-    :root {
-      --color-primary: ${t.primaryDark};
-      --color-primary-dark: ${t.deepestDark};
-      --color-primary-light: ${t.primaryLight};
-      --color-accent: ${t.accent};
-      --color-accent-dark: ${t.accentHover};
-      --color-accent-light: ${t.accentLight};
-      --color-cta: ${t.cta};
-      --color-cta-hover: ${t.ctaHover};
-      --color-cta-active: ${t.ctaActive};
-      --color-cta-text: ${t.ctaText};
-      --color-mint: ${t.softBackground};
-      --color-mint-dark: ${t.softBackgroundDark};
-      --color-warm-white: ${t.background};
-      --color-charcoal: ${t.text};
-      --color-charcoal-muted: ${t.muted};
-      --color-border: ${t.border};
-    }
-  `;
-
   return (
-    <html lang="en" className={`${plusJakarta.variable} ${playfair.variable} scroll-smooth antialiased`}>
+    <html
+      lang="en"
+      className={`${plusJakarta.variable} ${notoDevanagari.variable} ${sourceSerif.variable}`}
+    >
       <head>
-        <style dangerouslySetInnerHTML={{ __html: themeCssVariables }} />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      </head>
+      <body className="antialiased overflow-x-hidden min-h-screen flex flex-col bg-white text-[#0F2321]">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(dentistSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(hospitalStructuredData),
+          }}
         />
-      </head>
-      <body className="min-h-screen bg-[var(--color-warm-white)] text-[var(--color-charcoal)] font-sans flex flex-col antialiased selection:bg-[var(--color-mint)] selection:text-[var(--color-primary)]">
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

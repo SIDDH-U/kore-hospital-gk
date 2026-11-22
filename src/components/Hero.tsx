@@ -1,226 +1,190 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { siteConfig, buildWhatsAppLink } from "@/config/site.config";
-import { StarIcon, CalendarIcon, PhoneIcon, ArrowRightIcon, WhatsAppIcon, ShieldCheckIcon } from "./Icons";
-import { useRipple, useIdleAnimationObserver } from "./useRipple";
+import React from "react";
+import { siteConfig } from "@/config/site.config";
+import { useLanguage } from "@/context/LanguageContext";
+import { Button } from "./ui/Button";
+import { AppointmentForm } from "./AppointmentForm";
+import { Calendar, Phone, ShieldCheck, UserCheck, Lock } from "lucide-react";
 
 interface HeroProps {
-  onOpenBooking?: () => void;
+  onOpenBooking: () => void;
 }
 
 export function Hero({ onOpenBooking }: HeroProps) {
-  const heroRef = useRef<HTMLElement | null>(null);
-  const bookBtnRef = useRef<HTMLAnchorElement | null>(null);
-  const callBtnRef = useRef<HTMLAnchorElement | null>(null);
+  const { isMarathi } = useLanguage();
 
-  // Ripple handlers for primary and secondary buttons
-  const { ripples: bookRipples, createRipple: createBookRipple } = useRipple("teal");
-  const { ripples: callRipples, createRipple: createCallRipple } = useRipple("mint");
-
-  // Idle animation viewport observer
-  useIdleAnimationObserver(bookBtnRef);
-  useIdleAnimationObserver(callBtnRef);
-
-  const [isHeroActive, setIsHeroActive] = useState(true);
-
-  useEffect(() => {
-    const el = heroRef.current;
-    if (!el || typeof window === "undefined") return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsHeroActive(entry.isIntersecting);
-      },
-      { threshold: 0.05 }
-    );
-
-    observer.observe(el);
-
-    const handleVisibility = () => {
-      setIsHeroActive(!document.hidden);
-    };
-
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => {
-      observer.disconnect();
-      document.removeEventListener("visibilitychange", handleVisibility);
-    };
-  }, []);
+  const trustItems = [
+    {
+      icon: ShieldCheck,
+      tint: "bg-[#EAF6F2] text-[#0B7A68]",
+      labelEn: "Ksharsutra Care",
+      labelMr: "क्षारसूत्र उपचार",
+      descEn: "Authentic therapy",
+      descMr: "शास्त्रोक्त पद्धत",
+    },
+    {
+      icon: UserCheck,
+      tint: "bg-[#FDF0D5] text-[#B87108]",
+      labelEn: "Lady Doctor",
+      labelMr: "महिला डॉक्टर",
+      descEn: "Dr. Kiran Kore",
+      descMr: "डॉ. किरण कोरे",
+    },
+    {
+      icon: Lock,
+      tint: "bg-[#E3F0FA] text-[#1D70B8]",
+      labelEn: "Private Care",
+      labelMr: "पूर्ण गोपनीयता",
+      descEn: "Discreet chambers",
+      descMr: "स्वतंत्र तपासणी",
+    },
+  ];
 
   return (
     <section
-      ref={heroRef}
       id="hero"
       aria-labelledby="hero-heading"
-      className={`relative bg-[#0B3B4A] text-white rounded-b-[36px] sm:rounded-b-[48px] lg:rounded-b-[60px] overflow-hidden flex flex-col lg:block ${
-        !isHeroActive ? "hero-paused" : ""
-      }`}
+      className="relative bg-gradient-to-b from-[#EAF6F2] via-[#F4FAF8] to-white text-[#0F2321] overflow-hidden py-6 sm:py-8 lg:py-12 border-b border-[#D5E6E0]"
     >
-      {/* ========================================================
-          RESPONSIVE HERO BACKGROUND PHOTO WITH GRADIENT MASK
-          Mobile (< 1024px): Sits at bottom with vertical mask fade
-          Desktop (1024px+): Covers right 58% with smooth horizontal gradient mask
-         ======================================================== */}
-      <div
-        className="relative w-full aspect-[4/5] -mt-6 sm:-mt-8 overflow-hidden z-0 order-2 lg:order-none lg:mt-0 lg:aspect-auto lg:absolute lg:inset-y-0 lg:right-0 lg:w-[58%] lg:pointer-events-none"
-        aria-hidden="true"
-      >
-        {/* Soft aqua radial glow pulsing behind the patient */}
-        <div
-          className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(38,181,172,0.22)_0%,transparent_65%)] lg:bg-[radial-gradient(circle_at_60%_40%,rgba(38,181,172,0.28)_0%,transparent_70%)] pointer-events-none z-10"
-        />
+      <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* DESKTOP LAYOUT (12 Columns) */}
+        <div className="hidden lg:grid lg:grid-cols-12 gap-8 xl:gap-12 items-center">
+          {/* Left 7 Columns: Headline, Subcopy, Buttons, Trust Row */}
+          <div className="lg:col-span-7 space-y-6 text-left">
+            <h1
+              id="hero-heading"
+              className="font-display text-[44px] xl:text-[54px] font-bold text-[#064B40] leading-[1.12] tracking-tight text-balance"
+              lang={isMarathi ? "mr" : "en"}
+            >
+              {isMarathi
+                ? "मुळव्याध, फिशर व फिस्टुलावर सुरक्षित व खाजगी उपचार"
+                : "Specialist Care for Piles, Fissure & Fistula in Gangakhed"}
+            </h1>
 
-        {/* Masked photo container with responsive gradient mask */}
-        <div className="relative w-full h-full hero-photo-mask">
-          <picture className="w-full h-full">
-            <source
-              media="(min-width: 1024px)"
-              srcSet="/images/hero-desktop.webp"
-              width={1600}
-              height={900}
-            />
-            <img
-              src="/images/hero-mobile.webp"
-              alt={`Happy smiling patient at ${siteConfig.brand.name}`}
-              width={800}
-              height={1000}
-              fetchPriority="high"
-              loading="eager"
-              className="w-full h-full object-cover object-top lg:object-[60%_25%]"
-            />
-          </picture>
+            <p
+              className="text-base xl:text-lg text-[#3F5652] leading-relaxed max-w-xl text-balance"
+              lang={isMarathi ? "mr" : "en"}
+            >
+              {isMarathi
+                ? "डॉ. अनंत कोरे आणि डॉ. किरण कोरे यांच्याकडून पूर्ण गोपनीयता, आदरयुक्त तपासणी व शास्त्रोक्त क्षारसूत्र चिकित्सा."
+                : "Private, careful examination and authentic Ayurvedic Ksharsutra care from Dr. Anant Kore and Dr. Kiran Kore."}
+            </p>
 
-          {/* Deep ocean teal tint overlay for perfect text contrast */}
-          <div
-            className="absolute inset-0 bg-[#0B3B4A]/[0.22] pointer-events-none"
-            style={{ mixBlendMode: "multiply" }}
-          />
-        </div>
-      </div>
+            {/* CTAs */}
+            <div className="flex items-center gap-4 pt-1">
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={onOpenBooking}
+                icon={<Calendar className="w-5 h-5 text-[#0F2321]" strokeWidth={2} />}
+              >
+                {isMarathi ? "अपॉइंटमेंट बुक करा" : "Book appointment"}
+              </Button>
 
-      {/* ========================================================
-          HERO CONTENT CONTAINER
-          Mobile: Top block in column layout
-          Desktop: Left column over solid deep teal
-         ======================================================== */}
-      <div className="relative z-10 max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:py-24 order-1 lg:order-none">
-        <div className="max-w-xl lg:max-w-2xl flex flex-col items-start">
-          {/* 1. Rating & Trust Chip (Sequence 1) */}
-          <div className="hero-seq-1 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs sm:text-sm font-semibold text-white mb-4 sm:mb-6 backdrop-blur-sm shadow-sm">
-            <div className="flex items-center text-[#F2A65A]">
-              <StarIcon className="w-4 h-4 fill-[#F2A65A] text-[#F2A65A]" />
+              <Button
+                variant="secondary-light"
+                size="lg"
+                href={`tel:${siteConfig.contact.phoneRaw}`}
+                icon={<Phone className="w-5 h-5 text-[#064B40]" strokeWidth={2} />}
+              >
+                {isMarathi ? "थेट फोन करा" : "Call now"}
+              </Button>
             </div>
-            <span className="font-bold text-white">{siteConfig.hero.badgeRating}</span>
-            <span className="text-white/30">|</span>
-            <span className="text-white/90">{siteConfig.hero.badgePatients}</span>
+
+            {/* Desktop Trust Row */}
+            <div className="pt-4 border-t border-[#D5E6E0] grid grid-cols-3 gap-3">
+              {trustItems.map((item, idx) => {
+                const IconComponent = item.icon;
+                return (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-3 p-2.5 rounded-xl bg-white border border-[#D5E6E0] shadow-2xs"
+                  >
+                    <div className={`w-9 h-9 rounded-lg ${item.tint} flex items-center justify-center shrink-0`}>
+                      <IconComponent className="w-5 h-5" strokeWidth={2} />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold text-[#064B40] leading-tight truncate">
+                        {isMarathi ? item.labelMr : item.labelEn}
+                      </div>
+                      <div className="text-[11px] text-[#5A7370] leading-tight truncate">
+                        {isMarathi ? item.descMr : item.descEn}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          {/* 2 & 3. Headline with Serif Display (Sequence 2 & 3) */}
+          {/* Right 5 Columns: Appointment Request Card with Deep Green Backdrop */}
+          <div className="lg:col-span-5 relative">
+            {/* Deep-green rounded panel (radius 28px) offset ~16px down/right */}
+            <div
+              className="absolute inset-0 translate-x-3.5 translate-y-3.5 rounded-[28px] bg-[#064B40] shadow-lg"
+              aria-hidden="true"
+            />
+
+            {/* Foreground Card */}
+            <div className="relative rounded-[26px] bg-white border border-[#D5E6E0] p-6 shadow-xl">
+              <AppointmentForm />
+            </div>
+          </div>
+        </div>
+
+        {/* MOBILE LAYOUT (< 1024px) */}
+        <div className="lg:hidden space-y-4 text-center">
           <h1
-            id="hero-heading"
-            aria-label={`${siteConfig.hero.headingPrefix} ${siteConfig.hero.headingHighlight} ${siteConfig.hero.headingRest}`}
-            className="hero-h1 font-bold text-white tracking-tight text-left max-w-xl drop-shadow-sm text-balance"
+            id="hero-heading-mobile"
+            className="font-display text-[clamp(1.75rem,7.2vw,2.25rem)] font-bold text-[#064B40] leading-[1.18] tracking-tight px-1"
+            lang={isMarathi ? "mr" : "en"}
           >
-            <span aria-hidden="true">
-              <span className="hero-seq-2 block">
-                <span className="smile-shimmer font-serif">{siteConfig.hero.headingPrefix}</span>
-              </span>
-              <span className="hero-seq-3 block font-serif font-medium text-white/95 mt-1 sm:mt-1.5">
-                {siteConfig.hero.headingHighlight}{" "}
-                <span className="text-[#F2A65A] italic">{siteConfig.hero.headingRest}</span>
-              </span>
-            </span>
+            {isMarathi
+              ? "मुळव्याध, फिशर व फिस्टुलावर खाजगी व सुरक्षित उपचार"
+              : "Specialist Care for Piles, Fissure & Fistula"}
           </h1>
 
-          {/* 4. Subtext (Sequence 4) */}
-          <p className="hero-seq-4 mt-4 sm:mt-5 text-base sm:text-lg text-white/85 leading-relaxed max-w-lg text-left drop-shadow-sm text-balance font-normal">
-            <span className="lg:hidden">{siteConfig.hero.subtext}</span>
-            <span className="hidden lg:inline">{siteConfig.hero.desktopSubtext}</span>
+          <p
+            className="text-xs sm:text-sm text-[#3F5652] leading-relaxed max-w-sm mx-auto px-2"
+            lang={isMarathi ? "mr" : "en"}
+          >
+            {isMarathi
+              ? "डॉ. अनंत कोरे व डॉ. किरण कोरे यांच्याकडून पूर्ण गोपनीयता व क्षारसूत्र चिकित्सा."
+              : "Private examination & Ayurvedic Ksharsutra care by Dr. Anant Kore & Dr. Kiran Kore."}
           </p>
 
-          {/* 5. Action Buttons (Sequence 5) */}
-          <div
-            id="hero-cta-buttons"
-            className="hero-seq-5 mt-7 sm:mt-8 w-full flex flex-row max-[359px]:flex-col items-stretch sm:items-center gap-3 sm:gap-4"
-          >
-            {/* Primary CTA: Book Appointment */}
-            <Link
-              ref={bookBtnRef}
-              href="/book"
+          {/* Single Full-Width Primary Button (Opens Booking Sheet) */}
+          <div className="pt-1">
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
               onClick={onOpenBooking}
-              onPointerDown={createBookRipple}
-              style={{ "--shine-delay": "0.4s" } as React.CSSProperties}
-              className="btn-idle-shine btn-ripple-container flex-1 sm:flex-initial h-[50px] px-7 rounded-full bg-[#F2A65A] hover:bg-[#E09244] text-[#07252F] font-extrabold text-sm sm:text-base btn-press flex items-center justify-center gap-2.5 shadow-lg shadow-[#0B3B4A]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#26B5AC] transition-all whitespace-nowrap"
+              icon={<Calendar className="w-5 h-5 text-[#0F2321]" strokeWidth={2} />}
             >
-              <CalendarIcon className="w-5 h-5 text-[#07252F] shrink-0" />
-              <span>{siteConfig.hero.ctaPrimary}</span>
-              <ArrowRightIcon className="w-4 h-4 text-[#07252F]" />
-
-              {/* Touch Ripples */}
-              {bookRipples.map((r) => (
-                <span
-                  key={r.id}
-                  className="btn-ripple-circle"
-                  style={{
-                    left: r.x,
-                    top: r.y,
-                    width: r.size,
-                    height: r.size,
-                    backgroundColor: "rgba(255,255,255,0.4)",
-                  }}
-                />
-              ))}
-            </Link>
-
-            {/* Secondary CTA: Call Clinic */}
-            <a
-              ref={callBtnRef}
-              href={`tel:${siteConfig.contact.phoneRaw}`}
-              onPointerDown={createCallRipple}
-              className="btn-ripple-container shrink-0 h-[50px] px-6 rounded-full bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-sm sm:text-base btn-press flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#26B5AC] transition-all backdrop-blur-sm whitespace-nowrap"
-              aria-label={`Call ${siteConfig.brand.name} at ${siteConfig.contact.phone}`}
-            >
-              <span className="phone-ring-icon">
-                <PhoneIcon className="w-4 h-4 text-[#26B5AC]" />
-              </span>
-              <span>{siteConfig.hero.ctaSecondary}</span>
-
-              {/* Touch Ripples */}
-              {callRipples.map((r) => (
-                <span
-                  key={r.id}
-                  className="btn-ripple-circle"
-                  style={{
-                    left: r.x,
-                    top: r.y,
-                    width: r.size,
-                    height: r.size,
-                    backgroundColor: "rgba(255,255,255,0.25)",
-                  }}
-                />
-              ))}
-            </a>
+              {isMarathi ? "अपॉइंटमेंट बुक करा" : "Book appointment"}
+            </Button>
           </div>
 
-          {/* Reassuring Dental Studio Trust Indicators */}
-          <div className="mt-8 pt-6 border-t border-white/15 w-full flex flex-wrap items-center gap-y-2 gap-x-5 text-xs sm:text-sm text-white/80">
-            <div className="flex items-center gap-1.5">
-              <ShieldCheckIcon className="w-4 h-4 text-[#26B5AC]" />
-              <span className="font-semibold text-white/95">Hospital-Grade Sterilisation</span>
-            </div>
-            <span className="text-white/30 hidden sm:inline">·</span>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#26B5AC]" />
-              <span className="font-semibold text-white/95">Computer-Assisted Numbing</span>
-            </div>
-            <span className="text-white/30 hidden sm:inline">·</span>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#F2A65A]" />
-              <span className="font-semibold text-white/95">0% Interest EMI Available</span>
-            </div>
+          {/* Mobile 3-Column Trust Grid (Centered, short label, nothing touching edges) */}
+          <div className="pt-3 grid grid-cols-3 gap-2 px-1">
+            {trustItems.map((item, idx) => {
+              const IconComponent = item.icon;
+              return (
+                <div
+                  key={idx}
+                  className="flex flex-col items-center justify-center p-2 rounded-xl bg-white/80 border border-[#D5E6E0] shadow-2xs text-center"
+                >
+                  <div className={`w-8 h-8 rounded-lg ${item.tint} flex items-center justify-center mb-1 shrink-0`}>
+                    <IconComponent className="w-4 h-4" strokeWidth={2} />
+                  </div>
+                  <span className="text-[11.5px] font-bold text-[#064B40] leading-tight text-center line-clamp-2">
+                    {isMarathi ? item.labelMr : item.labelEn}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

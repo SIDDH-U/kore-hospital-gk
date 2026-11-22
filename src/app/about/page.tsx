@@ -5,7 +5,7 @@ import { AboutContent } from "./AboutContent";
 
 export const metadata: Metadata = {
   title: `About Us | ${siteConfig.brand.name}`,
-  description: `Learn about ${siteConfig.brand.name} - our philosophy of painless dentistry, 3D technology, and specialist doctor team.`,
+  description: `Learn about ${siteConfig.brand.name} in Gangakhed - our philosophy of authentic Ksharsutra therapy, privacy, and experienced doctor team.`,
   alternates: {
     canonical: `${getSiteUrl()}/about`,
   },
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     siteName: siteConfig.brand.name,
     images: [
       {
-        url: `${getSiteUrl()}/images/hero-desktop.webp`,
-        width: 1600,
+        url: `${getSiteUrl()}/images/clinic-exterior.jpg`,
+        width: 1200,
         height: 900,
         alt: `About ${siteConfig.brand.name}`,
       },

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F2F8F6"/>
+      <stop offset="100%" stop-color="#E1EFEA"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="38%" r="45%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#F2F8F6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bgGrad)"/>
+  <circle cx="400" cy="225" r="260" fill="url(#glow)"/>
+
+  <!-- Decorative Pattern Grid -->
+  <g opacity="0.15" stroke="#0F6B5C" stroke-width="1">
+    <line x1="80" y1="0" x2="80" y2="600" stroke-dasharray="4 8"/>
+    <line x1="720" y1="0" x2="720" y2="600" stroke-dasharray="4 8"/>
+    <line x1="0" y1="80" x2="800" y2="80" stroke-dasharray="4 8"/>
+    <line x1="0" y1="520" x2="800" y2="520" stroke-dasharray="4 8"/>
+  </g>
+
+  <!-- Card Border -->
+  <rect x="24" y="24" width="752" height="552" rx="32" stroke="#D6E5E1" stroke-width="2" fill="none"/>
+
+  <!-- Center Artwork Scaled -->
+  <g transform="translate(200, 0)">
+    
+      <!-- Gentle Harmony Waves and Botanical Bud -->
+      <circle cx="200" cy="225" r="72" fill="#0F6B5C" opacity="0.08"/>
+      <path d="M150 235 Q175 205 200 235 T250 235" fill="none" stroke="#0F6B5C" stroke-width="5" stroke-linecap="round"/>
+      <path d="M155 255 Q175 230 200 255 T245 255" fill="none" stroke="#E8A33D" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="200" cy="190" r="16" fill="#0F6B5C"/>
+      <path d="M200 180 V200 M190 190 H210" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+    
+  </g>
+
+  <!-- Top Badge -->
+  <g transform="translate(400, 370)">
+    <rect x="-140" y="0" width="280" height="36" rx="18" fill="#0A4A40"/>
+    <text x="0" y="23" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" letter-spacing="1">KORE HOSPITAL SPECIALTY</text>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="455" text-anchor="middle" fill="#0A4A40" font-family="Georgia, serif" font-size="34" font-weight="700">Constipation & Pain Relief</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="495" text-anchor="middle" fill="#5B6F70" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="500">Ayurvedic Digestive Balance & Stool Regulation</text>
+
+  <!-- Bottom Accent Line -->
+  <rect x="360" y="525" width="80" height="4" rx="2" fill="#E8A33D"/>
+</svg>

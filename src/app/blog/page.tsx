@@ -13,8 +13,8 @@ import { CtaBanner } from "@/components/CtaBanner";
 import { ArrowRightIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
-  title: `Dental Health Blog & Smile Guides | ${siteConfig.brand.name}`,
-  description: `Read evidence-based dental care tips, clear aligner guides, and oral wellness articles by dentists at ${siteConfig.brand.name}.`,
+  title: `Health Blog & Patient Guides | ${siteConfig.brand.name}`,
+  description: `Read doctor-reviewed guidance on piles management, Ksharsutra therapy, fissure relief, and anorectal health from specialists at ${siteConfig.brand.name}.`,
   alternates: {
     canonical: `${getSiteUrl()}/blog`,
   },
@@ -24,21 +24,21 @@ export default function BlogIndexPage() {
   const articles = hospitalConfig.blogArticles;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFCFC] text-[#12303A]">
+    <div className="min-h-screen flex flex-col bg-[#EAF6F2] text-[#0F2321]">
       <TopStrip />
       <Header />
 
       <main className="flex-1 pb-16 lg:pb-0">
-        <section className="bg-[#0B3B4A] text-white py-14 lg:py-20 text-center">
+        <section className="bg-[#064B40] text-white py-14 lg:py-20 text-center">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
-            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#26B5AC] border border-white/15 mb-3">
-              DENTAL INSIGHTS
+            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#F5A524] border border-white/15 mb-3">
+              HEALTH INSIGHTS & AWARENESS
             </span>
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
-              Smile & Dental Wellness Blog
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+              Anorectal Health & Wellness Articles
             </h1>
             <p className="mt-3.5 text-sm sm:text-base text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Clear orthodontic advice, implant insights, and preventive oral health guides curated by our specialist dentists.
+              Evidence-based Ayurvedic insights, dietary guidance for piles prevention, and Ksharsutra therapy explained by specialists at Kore Hospital.
             </p>
           </div>
         </section>
@@ -62,27 +62,27 @@ export default function BlogIndexPage() {
                   </div>
                   <div className="p-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <div className="flex items-center justify-between text-xs text-[#5B7480] mb-2.5">
+                      <div className="flex items-center justify-between text-xs text-[#3F5652] mb-2.5">
                         <span>{article.date}</span>
                         <span>{article.readTime}</span>
                       </div>
-                      <h2 className="font-display text-lg sm:text-xl font-bold text-[#0B3B4A] leading-snug">
-                        <Link href={`/blog/${article.slug}`} className="hover:text-[#26B5AC] transition-colors">
+                      <h2 className="font-serif text-lg sm:text-xl font-bold text-[#064B40] leading-snug">
+                        <Link href={`/blog/${article.slug}`} className="hover:text-[#0B7A68] transition-colors">
                           {article.title}
                         </Link>
                       </h2>
-                      <p className="text-xs sm:text-sm text-[#5B7480] mt-2.5 leading-relaxed line-clamp-3">
+                      <p className="text-xs sm:text-sm text-[#3F5652] mt-2.5 leading-relaxed line-clamp-3">
                         {article.excerpt}
                       </p>
                     </div>
 
                     <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                      <span className="text-xs font-semibold text-[#12303A]">
+                      <span className="text-xs font-semibold text-[#0F2321]">
                         By {article.author}
                       </span>
                       <Link
                         href={`/blog/${article.slug}`}
-                        className="text-xs font-bold text-[#26B5AC] hover:text-[#1E948C] flex items-center gap-1"
+                        className="text-xs font-bold text-[#0B7A68] hover:text-[#064B40] flex items-center gap-1"
                       >
                         <span>Read</span>
                         <ArrowRightIcon className="w-3.5 h-3.5" />

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         url: `${getSiteUrl()}/images/hero-desktop.webp`,
         width: 1600,
         height: 900,
-        alt: `${siteConfig.brand.name} - Luxury Dental Studio`,
+        alt: `${siteConfig.brand.name} - Piles & Anorectal Care Centre`,
       },
     ],
     locale: "en_IN",
@@ -28,16 +28,16 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const dentalJsonLd = {
+  const hospitalJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Dentist",
+    "@type": "MedicalClinic",
     name: siteConfig.brand.name,
-    legalName: siteConfig.brand.legalName,
+    alternateName: "कोरे हॉस्पिटल – मूळव्याध सेंटर",
     description: siteConfig.brand.fullDescription,
     url: getSiteUrl(),
     telephone: siteConfig.contact.phoneRaw,
     email: siteConfig.contact.email,
-    image: `${getSiteUrl()}/images/hero-desktop.webp`,
+    image: `${getSiteUrl()}/images/clinic-exterior.jpg`,
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",
@@ -49,15 +49,15 @@ export default function HomePage() {
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: "19.1383",
-      longitude: "77.3210",
+      latitude: "18.9698392",
+      longitude: "76.7479928",
     },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         opens: "09:00",
-        closes: "20:30",
+        closes: "20:00",
       },
       {
         "@type": "OpeningHoursSpecification",
@@ -67,12 +67,12 @@ export default function HomePage() {
       },
     ],
     medicalSpecialty: [
-      "Dentistry",
-      "Orthodontics",
-      "Periodontics",
-      "Endodontics",
-      "PediatricDentistry",
-      "Prosthodontics",
+      "Ano-rectal Care",
+      "Ksharsutra Therapy",
+      "Ayurvedic Surgery",
+      "Proctology",
+      "General Medicine",
+      "Gynecology",
     ],
   };
 
@@ -80,7 +80,7 @@ export default function HomePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(dentalJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(hospitalJsonLd) }}
       />
       <HomeClient />
     </>

@@ -18,16 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.95,
     },
-    ...(siteConfig.sections.showGallery
-      ? [
-          {
-            url: `${siteUrl}/gallery`,
-            lastModified,
-            changeFrequency: "weekly" as const,
-            priority: 0.9,
-          },
-        ]
-      : []),
     ...(siteConfig.sections.showDoctors
       ? [
           {
@@ -35,16 +25,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified,
             changeFrequency: "weekly" as const,
             priority: 0.9,
-          },
-        ]
-      : []),
-    ...(siteConfig.sections.showReviews
-      ? [
-          {
-            url: `${siteUrl}/reviews`,
-            lastModified,
-            changeFrequency: "weekly" as const,
-            priority: 0.85,
           },
         ]
       : []),

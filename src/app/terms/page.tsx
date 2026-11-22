@@ -18,37 +18,37 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFCFC] text-[#12303A]">
+    <div className="min-h-screen flex flex-col bg-[#EAF6F2] text-[#0F2321]">
       <TopStrip />
       <Header />
 
       <main className="flex-1 max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-[#26B5AC] mb-4">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-[#0B7A68] mb-4">
           <Link href="/" className="hover:underline">
             Home
           </Link>
           <span>/</span>
-          <span className="text-[#5B7480]">Terms of Service</span>
+          <span className="text-[#3F5652]">Terms of Service</span>
         </nav>
 
-        <h1 className="font-display text-3xl font-bold text-[#0B3B4A] mb-6">
+        <h1 className="font-serif text-3xl font-bold text-[#064B40] mb-6">
           Terms of Service
         </h1>
 
-        <div className="text-sm text-[#5B7480] space-y-4 leading-relaxed">
+        <div className="text-sm text-[#3F5652] space-y-4 leading-relaxed">
           <p>
             Welcome to {siteConfig.brand.legalName}. By browsing this website or scheduling consultations through our online booking desk and WhatsApp concierge, you agree to comply with the terms and guidelines detailed below.
           </p>
-          <h2 className="font-display text-lg font-bold text-[#0B3B4A] pt-4">
-            Dental Consultation Disclaimer
+          <h2 className="font-serif text-lg font-bold text-[#064B40] pt-4">
+            Medical Consultation Disclaimer
           </h2>
           <p>
-            Content on this website is provided for informational and appointment coordination purposes. Detailed clinical diagnosis and treatment plans are finalized following an in-person 3D scan and clinical evaluation by our specialist dentists. For acute dental emergencies, please call our direct hotline at {siteConfig.contact.phone}.
+            Content on this website is provided for informational and appointment coordination purposes only. Detailed clinical diagnosis and treatment plans are finalized solely following an in-person clinical evaluation by our doctors. For urgent concerns, please call our direct helpline at {siteConfig.contact.phone}.
           </p>
           <div className="pt-8">
             <Link
               href="/"
-              className="inline-flex items-center px-6 py-2.5 rounded-full bg-[#0B3B4A] text-white font-bold text-sm btn-press shadow"
+              className="inline-flex items-center px-6 py-2.5 rounded-full bg-[#064B40] text-white font-bold text-sm btn-press shadow"
             >
               ← Back to Homepage
             </Link>

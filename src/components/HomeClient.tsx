@@ -5,31 +5,24 @@ import { siteConfig } from "@/config/site.config";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { RatingAndQuickPicker } from "@/components/RatingAndQuickPicker";
+import { WhenToSeeDoctor } from "@/components/WhenToSeeDoctor";
+import { UnderstandCondition } from "@/components/UnderstandCondition";
 import { TreatmentsGrid } from "@/components/TreatmentsGrid";
-import { WhyChooseUs } from "@/components/WhyChooseUs";
-import { SmileGallery } from "@/components/SmileGallery";
-import { DoctorsMarquee } from "@/components/DoctorsMarquee";
-import { ReviewsSection } from "@/components/ReviewsSection";
 import { HowItWorks } from "@/components/HowItWorks";
+import { DoctorsMarquee } from "@/components/DoctorsMarquee";
+import { PrivacyComfort } from "@/components/PrivacyComfort";
 import { FaqAccordion } from "@/components/FaqAccordion";
-import { CtaBanner } from "@/components/CtaBanner";
 import { ContactSection } from "@/components/ContactSection";
+import { CtaBanner } from "@/components/CtaBanner";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { AppointmentModal } from "@/components/AppointmentModal";
-import { useScrollAnimation } from "@/components/useScrollAnimation";
+import { BookingSheet } from "@/components/BookingSheet";
 
 export function HomeClient() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [selectedTreatment, setSelectedTreatment] = useState("");
 
-  // Activate scroll-driven entrance and touch-first card observers
-  useScrollAnimation();
-
-  const handleOpenBooking = (treatmentName?: string) => {
-    setSelectedTreatment(treatmentName || "");
+  const handleOpenBooking = () => {
     setIsBookingOpen(true);
   };
 
@@ -38,63 +31,59 @@ export function HomeClient() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFCFC] text-[#12303A] selection:bg-[#E9F7F5] selection:text-[#0B3B4A]">
-      {/* 1. Top bar: address, working hours, phone */}
+    <div className="min-h-screen flex flex-col bg-white text-[#0F2321] selection:bg-[#EAF6F2] selection:text-[#0B7A68]">
+      {/* 1. Desktop Top Bar (36px, non-wrapping) */}
       <TopStrip />
 
-      {/* 2. Nav */}
-      <Header onOpenBooking={() => handleOpenBooking()} />
+      {/* 2. Main Navigation Bar */}
+      <Header onOpenBooking={handleOpenBooking} />
 
       {/* Main Content with bottom padding on mobile for sticky action bar */}
       <main className="flex-1 pb-16 lg:pb-0">
-        {/* 3. Hero */}
-        <Hero onOpenBooking={() => handleOpenBooking()} />
+        {/* 3. Hero Section (Bright light mint-to-white, 7/5 col grid on desktop, 1-screen mobile) */}
+        <Hero onOpenBooking={handleOpenBooking} />
 
-        {/* 4. Rating strip + quick picker */}
-        <RatingAndQuickPicker onSelectTreatment={(t) => setSelectedTreatment(t)} />
+        {/* 4. Symptoms / "When to consult" (Mint background, 2-col compact tiles) */}
+        <WhenToSeeDoctor />
 
-        {/* 5. Treatments carousel (with prices) */}
-        <TreatmentsGrid onOpenBooking={(t) => handleOpenBooking(t)} />
+        {/* 5. "Understand your condition" (White background, swipeable on mobile, 4-col on desktop) */}
+        <UnderstandCondition />
 
-        {/* 6. Why choose us (Deep teal 2x3 grid) */}
-        <WhyChooseUs />
+        {/* 6. Treatments (White background, 2-col compact tiles with soft hue tints) */}
+        <TreatmentsGrid />
 
-        {/* 7. Smile Gallery (Interactive single-card slider carousel) */}
-        {siteConfig.sections.showGallery && <SmileGallery />}
-
-        {/* 8. Doctors (Meet our dentists strip) */}
-        {siteConfig.sections.showDoctors && <DoctorsMarquee />}
-
-        {/* 9. Reviews (Swipeable card carousel directly after doctors) */}
-        {siteConfig.sections.showReviews && <ReviewsSection />}
-
-        {/* 10. How it works (Compact 4-step stepper) */}
+        {/* 7. "How a visit works" (Deep green band with white text & amber step numbers) */}
         <HowItWorks />
 
-        {/* 11. FAQ (First 4 questions + expandable remainder) */}
+        {/* 8. Doctors Section (White background, 72px tinted avatars, zero photos) */}
+        {siteConfig.sections.showDoctors && <DoctorsMarquee />}
+
+        {/* 9. Privacy & Comfort (Mint background, three short icon rows) */}
+        <PrivacyComfort />
+
+        {/* 10. FAQ Section (White background, all collapsed by default) */}
         <FaqAccordion />
 
-        {/* 12. CTA banner */}
-        <CtaBanner onOpenBooking={() => handleOpenBooking()} />
-
-        {/* 13. Contact form + map */}
+        {/* 11. Contact Section (Mint background, Map + Hospital Building Photo beside map) */}
         <ContactSection />
+
+        {/* 12. Deep-green Pre-footer CTA Band */}
+        <CtaBanner onOpenBooking={handleOpenBooking} />
       </main>
 
-      {/* 14. Footer */}
+      {/* 13. Compact Footer */}
       <Footer />
 
-      {/* Desktop Floating WhatsApp Button */}
+      {/* 14. Desktop Floating WhatsApp Button (56px round icon, 24px from corner) */}
       <FloatingWhatsApp />
 
-      {/* Mobile Sticky Bottom Action Bar (Call Now / Book on WhatsApp) */}
-      <StickyActionBar onOpenBooking={() => handleOpenBooking()} />
+      {/* 15. Mobile Sticky Bottom Action Bar (3 equal buttons: Call | WhatsApp | Book) */}
+      <StickyActionBar onOpenBooking={handleOpenBooking} />
 
-      {/* Appointment Modal */}
-      <AppointmentModal
+      {/* 16. Appointment Booking Sheet / Dialog */}
+      <BookingSheet
         isOpen={isBookingOpen}
         onClose={handleCloseBooking}
-        defaultDepartment={selectedTreatment}
       />
     </div>
   );

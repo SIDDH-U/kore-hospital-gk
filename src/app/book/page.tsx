@@ -10,19 +10,19 @@ import { BookAppointmentForm, BookFormSkeleton } from "./BookForm";
 
 export const metadata: Metadata = {
   title: `Book a Consultation | ${siteConfig.brand.name}`,
-  description: `Schedule a consultation with our specialist dentists at ${siteConfig.brand.name}. ${siteConfig.brand.callbackNotice}`,
+  description: `Schedule a consultation with our specialist doctors at ${siteConfig.brand.name}, Gangakhed. Confidential care for piles, fissure & fistula.`,
   alternates: {
     canonical: `${getSiteUrl()}/book`,
   },
   openGraph: {
     title: `Book an Appointment | ${siteConfig.brand.name}`,
-    description: `Book your dental consultation online at ${siteConfig.brand.name}. Experience gentle, anxiety-free dental care.`,
+    description: `Book your proctology consultation at ${siteConfig.brand.name}. Respectful, discreet anorectal care.`,
     url: `${getSiteUrl()}/book`,
     siteName: siteConfig.brand.name,
     images: [
       {
-        url: `${getSiteUrl()}/images/hero-desktop.webp`,
-        width: 1600,
+        url: `${getSiteUrl()}/images/clinic-exterior.jpg`,
+        width: 1200,
         height: 900,
         alt: `Book a Consultation at ${siteConfig.brand.name}`,
       },
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
 export default function BookPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFCFC] text-[#12303A]">
+    <div className="min-h-screen flex flex-col bg-[#F2F8F6] text-[#14282A]">
       <TopStrip />
       <Header />
 
@@ -42,15 +42,15 @@ export default function BookPage() {
         <h1 className="sr-only">Book a Consultation | {siteConfig.brand.name}</h1>
 
         <noscript>
-          <div className="max-w-xl mx-auto mb-6 p-4 rounded-2xl bg-[#E9F7F5] border border-[#26B5AC]/30 text-center text-sm text-[#0B3B4A] font-medium">
+          <div className="max-w-xl mx-auto mb-6 p-4 rounded-2xl bg-[#E1EFEA] border border-[#0F6B5C]/30 text-center text-sm text-[#0A4A40] font-medium">
             Please call{" "}
             <a
               href={`tel:${siteConfig.contact.phoneRaw}`}
-              className="font-bold underline text-[#0B3B4A]"
+              className="font-bold underline text-[#0A4A40]"
             >
               {siteConfig.contact.phone}
             </a>{" "}
-            to schedule a consultation.
+            or message us directly on WhatsApp to book your consultation.
           </div>
         </noscript>
 
