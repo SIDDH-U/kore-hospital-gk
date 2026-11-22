@@ -36,13 +36,16 @@ export function AppointmentForm({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [concern, setConcern] = useState(concernOptions[0].id);
-  const [when, setWhen] = useState(whenOptions[0].id);
+  const [userSelectedWhen, setUserSelectedWhen] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
+
+  // Default to "Any day" when hospital is closed, otherwise "Today" (derived client state without cascading effect renders)
+  const when = userSelectedWhen ?? (liveStatus.isMounted && !liveStatus.isOpen ? "Any day" : "Today");
 
   const validate = () => {
     const errs: { name?: string; phone?: string } = {};
     if (!name.trim()) {
-      errs.name = isMarathi ? "कृपया रुग्णाचे नाव प्रविष्ट करा." : "Please enter the patient's name.";
+      errs.name = isMarathi ? "कृपया आपले नाव प्रविष्ट करा." : "Please enter your name.";
     }
 
     const cleanPhone = phone.replace(/\D/g, "");
@@ -68,13 +71,13 @@ export function AppointmentForm({
 
     const message = isMarathi
       ? `नमस्कार कोरे हॉस्पिटल, मला तपासणीसाठी वेळ हवी आहे:
-• रुग्णाचे नाव: ${name.trim()}
+• नाव: ${name.trim()}
 • मोबाईल: ${phone.trim()}
 • समस्या: ${concernLabel}
 • सोयीचा दिवस: ${whenLabel}
 (वेबसाइटद्वारे पाठवलेली विनंती)`
       : `Hello Kore Hospital, I would like to request a consultation:
-• Patient Name: ${name.trim()}
+• Name: ${name.trim()}
 • Mobile: ${phone.trim()}
 • Concern: ${concernLabel}
 • Preferred Day: ${whenLabel}
@@ -90,23 +93,18 @@ export function AppointmentForm({
 
   return (
     <div className={`w-full bg-white text-[#0F2321] ${className}`}>
-      {/* Header with Live Status */}
-      <div className="pb-3 border-b border-[#D5E6E0] flex items-center justify-between gap-2">
-        <div>
-          <h3 className="font-bold text-base sm:text-lg text-[#064B40] leading-snug">
-            {isMarathi ? "तपासणीसाठी वेळ निश्चित करा" : "Request a consultation"}
-          </h3>
-          <p className="text-xs text-[#5A7370]">
-            {isMarathi ? "गोपनीय सल्ला · थेट व्हॉट्सॲपवर पाठवा" : "Direct & private proctology inquiry"}
-          </p>
-        </div>
+      {/* Header with Live Status (Subtitle removed to keep card under ~600px) */}
+      <div className="pb-2.5 border-b border-[#D5E6E0] flex items-center justify-between gap-2">
+        <h3 className="font-bold text-base sm:text-[17px] text-[#064B40] leading-snug">
+          {isMarathi ? "तपासणीसाठी वेळ निश्चित करा" : "Request a consultation"}
+        </h3>
 
         {/* Live IST Status Chip */}
         <div className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF6F2] border border-[#D5E6E0] text-[11px] font-semibold text-[#064B40]">
           {liveStatus.isMounted && (
             <span
               className={`w-2 h-2 rounded-full shrink-0 ${
-                liveStatus.isOpen ? "bg-[#1B8755] animate-pulse" : "bg-[#B87108]"
+                liveStatus.isOpen ? "bg-[#167D48] animate-hero-pulse" : "bg-[#B87108]"
               }`}
             />
           )}
@@ -117,11 +115,11 @@ export function AppointmentForm({
         </div>
       </div>
 
-      <form onSubmit={handleSendWhatsApp} className="mt-3.5 space-y-3.5 text-left">
+      <form onSubmit={handleSendWhatsApp} className="mt-2.5 space-y-2.5 sm:space-y-3 text-left">
         {/* Name Field */}
         <div>
           <label htmlFor={`apt-name-${isSheet ? "sheet" : "card"}`} className="block text-xs font-semibold text-[#064B40] mb-1">
-            {isMarathi ? "रुग्णाचे पूर्ण नाव *" : "Patient full name *"}
+            {isMarathi ? "तुमचे नाव *" : "Your name *"}
           </label>
           <input
             id={`apt-name-${isSheet ? "sheet" : "card"}`}
@@ -132,8 +130,8 @@ export function AppointmentForm({
               setName(e.target.value);
               if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
             }}
-            placeholder={isMarathi ? "उदा. रमेश पाटील" : "e.g. Rahul Sharma"}
-            className={`w-full px-3.5 py-2.5 rounded-xl border bg-white text-[#0F2321] placeholder:text-[#5A7370]/50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#0B7A68] ${
+            placeholder={isMarathi ? "उदा. राहुल शर्मा" : "e.g. Rahul Sharma"}
+            className={`w-full h-11 px-3.5 rounded-xl border bg-white text-[#0F2321] text-sm placeholder:text-[#5A7370]/50 transition-[box-shadow,border-color] duration-120 focus:outline-none focus:ring-2 focus:ring-[#0B7A68] ${
               errors.name ? "border-red-500" : "border-[#D5E6E0]"
             }`}
           />
@@ -167,7 +165,7 @@ export function AppointmentForm({
                 if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
               }}
               placeholder="9876543210"
-              className={`w-full pl-12 pr-3.5 py-2.5 rounded-xl border bg-white text-[#0F2321] placeholder:text-[#5A7370]/50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#0B7A68] ${
+              className={`w-full h-11 pl-12 pr-3.5 rounded-xl border bg-white text-[#0F2321] text-sm placeholder:text-[#5A7370]/50 transition-[box-shadow,border-color] duration-120 focus:outline-none focus:ring-2 focus:ring-[#0B7A68] ${
                 errors.phone ? "border-red-500" : "border-[#D5E6E0]"
               }`}
             />
@@ -185,7 +183,7 @@ export function AppointmentForm({
           <label className="block text-xs font-semibold text-[#064B40] mb-1.5">
             {isMarathi ? "आपली मुख्य समस्या काय आहे?" : "What's your concern?"}
           </label>
-          <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Concern">
+          <div className="grid grid-cols-2 gap-1.5 sm:gap-2" role="radiogroup" aria-label="Concern">
             {concernOptions.map((opt) => {
               const isSelected = concern === opt.id;
               return (
@@ -195,7 +193,7 @@ export function AppointmentForm({
                   role="radio"
                   aria-checked={isSelected}
                   onClick={() => setConcern(opt.id)}
-                  className={`px-3 py-2 rounded-xl text-xs font-semibold text-center border transition-all cursor-pointer ${
+                  className={`px-2.5 py-1.5 sm:py-2 rounded-xl text-xs font-semibold text-center border transition-all duration-120 active:scale-[0.98] cursor-pointer ${
                     isSelected
                       ? "bg-[#064B40] text-white border-[#064B40] shadow-xs"
                       : "bg-[#F4FAF8] text-[#0F2321] border-[#D5E6E0] hover:bg-[#EAF6F2]"
@@ -213,7 +211,7 @@ export function AppointmentForm({
           <label className="block text-xs font-semibold text-[#064B40] mb-1.5">
             {isMarathi ? "कधी भेटायची इच्छा आहे?" : "When?"}
           </label>
-          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Preferred day">
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2" role="radiogroup" aria-label="Preferred day">
             {whenOptions.map((opt) => {
               const isSelected = when === opt.id;
               return (
@@ -222,8 +220,8 @@ export function AppointmentForm({
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  onClick={() => setWhen(opt.id)}
-                  className={`px-2.5 py-2 rounded-xl text-xs font-semibold text-center border transition-all cursor-pointer ${
+                  onClick={() => setUserSelectedWhen(opt.id)}
+                  className={`px-2 py-1.5 sm:py-2 rounded-xl text-xs font-semibold text-center border transition-all duration-120 active:scale-[0.98] cursor-pointer ${
                     isSelected
                       ? "bg-[#064B40] text-white border-[#064B40] shadow-xs"
                       : "bg-[#F4FAF8] text-[#0F2321] border-[#D5E6E0] hover:bg-[#EAF6F2]"
@@ -234,15 +232,23 @@ export function AppointmentForm({
               );
             })}
           </div>
+          {/* Note when hospital is closed (client-only render) */}
+          {liveStatus.isMounted && !liveStatus.isOpen && (
+            <p className="text-[11px] text-[#5A7370] mt-1.5 leading-tight">
+              {isMarathi
+                ? "हॉस्पिटल सध्या बंद आहे. मेसेज पाठवा, आम्ही उघडल्यावर उत्तर देऊ."
+                : "We're closed now. Send your message and we'll reply when we open."}
+            </p>
+          )}
         </div>
 
-        {/* Primary CTA: Send on WhatsApp (Passes 4.5:1 contrast) */}
-        <div className="pt-1 space-y-2 text-center">
+        {/* Primary CTA: Send on WhatsApp (Official WhatsApp green with > 4.5:1 contrast) */}
+        <div className="pt-1 space-y-1.5 text-center">
           <button
             type="submit"
-            className="w-full min-h-[48px] px-5 py-3 rounded-xl bg-[#F5A524] hover:bg-[#E09419] text-[#0F2321] font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xs transition-all active:scale-[0.98] cursor-pointer"
+            className="w-full h-11 sm:h-12 px-5 rounded-xl bg-[#167D48] hover:bg-[#12683B] active:bg-[#0E542F] text-white font-bold text-sm sm:text-[15px] flex items-center justify-center gap-2 shadow-xs transition-all duration-120 active:scale-[0.98] cursor-pointer"
           >
-            <MessageCircle className="w-5 h-5 text-[#0F2321] fill-[#0F2321]" strokeWidth={1.5} />
+            <MessageCircle className="w-5 h-5 text-white fill-white" strokeWidth={1.5} />
             <span>{isMarathi ? "व्हॉट्सॲपवर पाठवा" : "Send on WhatsApp"}</span>
           </button>
 
@@ -258,7 +264,7 @@ export function AppointmentForm({
           </p>
 
           {/* Privacy Note */}
-          <p className="text-[11px] text-[#5A7370] leading-snug pt-1">
+          <p className="text-[10.5px] text-[#5A7370] leading-snug pt-0.5">
             {isMarathi
               ? "यामुळे आपला संदेश थेट व्हॉट्सॲपवर उघडेल. या संकेतस्थळावर कोणतीही माहिती साठवली जात नाही."
               : "This opens WhatsApp with your message. Nothing is stored on this website."}

@@ -34,7 +34,7 @@ export function WhenToSeeDoctor() {
       <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
-          <span className="text-xs font-bold text-[#0B7A68] uppercase tracking-wider block mb-1">
+          <span className="text-xs font-semibold text-[#0B7A68] block mb-1">
             {isMarathi ? "लक्षणे ओळखणे" : "Symptom check"}
           </span>
           <h2

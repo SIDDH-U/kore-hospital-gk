@@ -43,7 +43,7 @@ export default function TreatmentsPage() {
             >
               {isMarathi
                 ? "गंगाखेड येथे शास्त्रोक्त क्षारसूत्र चिकित्सा, मुळव्याध नियंत्रण, फिशर आणि बद्धकोष्ठतेवर सुरक्षित व खाजगी उपचार."
-                : "Authentic Ayurvedic surgical and conservative proctology care in Gangakhed, Dist. Parbhani."}
+                : "Specialized Ayurvedic surgical and conservative proctology care in Gangakhed, Dist. Parbhani."}
             </p>
 
             <div className="mt-4 inline-block bg-[#EAF6F2] px-4 py-1.5 rounded-full text-xs text-[#064B40] border border-[#D5E6E0]">

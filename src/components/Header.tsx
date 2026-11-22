@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { HospitalLogo } from "./HospitalLogo";
 import { Button } from "./ui/Button";
 import { siteConfig } from "@/config/site.config";
@@ -17,6 +17,7 @@ export function Header({ onOpenBooking }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, setLanguage, isMarathi } = useLanguage();
   const pathname = usePathname();
+  const router = useRouter();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   // Close mobile menu on route change
@@ -94,26 +95,28 @@ export function Header({ onOpenBooking }: HeaderProps) {
                 <span className="whitespace-nowrap hidden xl:inline">{siteConfig.contact.phone}</span>
               </a>
 
-              {/* Primary CTA */}
-              {onOpenBooking ? (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={onOpenBooking}
-                  icon={<Calendar className="w-4 h-4 text-[#0F2321]" strokeWidth={2} />}
-                >
-                  {isMarathi ? "अपॉइंटमेंट" : "Book appointment"}
-                </Button>
-              ) : (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  href="/book"
-                  icon={<Calendar className="w-4 h-4 text-[#0F2321]" strokeWidth={2} />}
-                >
-                  {isMarathi ? "अपॉइंटमेंट" : "Book appointment"}
-                </Button>
-              )}
+              {/* Primary CTA: Scrolls to and focuses the form's name field */}
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={(e) => {
+                  const nameField = document.getElementById("apt-name-card");
+                  if (nameField) {
+                    e.preventDefault();
+                    nameField.scrollIntoView({ behavior: "smooth", block: "center" });
+                    setTimeout(() => {
+                      nameField.focus({ preventScroll: true });
+                    }, 400);
+                  } else if (onOpenBooking) {
+                    onOpenBooking();
+                  } else {
+                    router.push("/#apt-name-card");
+                  }
+                }}
+                icon={<Calendar className="w-4 h-4 text-[#0F2321]" strokeWidth={2} />}
+              >
+                {isMarathi ? "अपॉइंटमेंट" : "Book appointment"}
+              </Button>
             </div>
 
             {/* Mobile Right Controls: Language Toggle Pill + Hamburger Button (< 1024px) */}

@@ -62,7 +62,7 @@ export function AboutContent() {
                   {siteConfig.brand.name} was established in Gangakhed to provide individuals suffering from piles, anal fissures, fistulas, and chronic constipation with a trustworthy, empathetic medical sanctuary.
                 </p>
                 <p className="text-sm sm:text-base text-[#3F5652] leading-relaxed">
-                  Led by Dr. Anant Kamaji Kore (BAMS, Fellowship in Ksharsutra) and Dr. Kiran Anant Kore, the hospital adheres to authentic Ayurvedic surgical practices alongside modern clinical sanitation. We believe in conservative therapy first—recommending procedures only when strictly necessary after thorough diagnostic examination.
+                  Led by Dr. Anant Kamaji Kore (BAMS, Fellowship in Ksharsutra) and Dr. Kiran Anant Kore, the hospital adheres to traditional Ayurvedic surgical practices alongside modern clinical sanitation. We believe in conservative therapy first—recommending procedures only when strictly necessary after thorough diagnostic examination.
                 </p>
 
                 <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">

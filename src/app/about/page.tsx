@@ -5,7 +5,7 @@ import { AboutContent } from "./AboutContent";
 
 export const metadata: Metadata = {
   title: `About Us | ${siteConfig.brand.name}`,
-  description: `Learn about ${siteConfig.brand.name} in Gangakhed - our philosophy of authentic Ksharsutra therapy, privacy, and experienced doctor team.`,
+  description: `Learn about ${siteConfig.brand.name} in Gangakhed - our philosophy of specialized Ksharsutra therapy, privacy, and experienced doctor team.`,
   alternates: {
     canonical: `${getSiteUrl()}/about`,
   },
